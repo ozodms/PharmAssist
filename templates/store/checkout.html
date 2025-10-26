@@ -1,0 +1,169 @@
+{% extends 'store/main.html' %}
+
+{% block title %}Checkout — PharmAssist{% endblock %}
+
+{% block content %}
+<div class="bg-white sm:px-8 px-4 py-6">
+    <div class="max-w-screen-xl max-md:max-w-xl mx-auto">
+        <div class="flex flex-col lg:flex-row items-start lg:items-end gap-6 mb-16">
+            <div class="w-full">
+                <div class="flex items-center w-full">
+                    <div
+                        class="w-8 h-8 shrink-0 mx-[-1px] bg-[#07beb8] p-1.5 flex items-center justify-center rounded-full">
+                        <span class="text-sm text-white font-semibold">1</span>
+                    </div>
+                    <div class="w-full h-[3px] mx-4 rounded-lg bg-[#07beb8]"></div>
+                </div>
+                <div class="mt-2 mr-4">
+                    <h6 class="text-sm font-semibold text-slate-900">Cart</h6>
+                </div>
+            </div>
+            <div class="w-full">
+                <div class="flex items-center w-full">
+                    <div
+                        class="w-8 h-8 shrink-0 mx-[-1px] bg-[#07beb8] p-1.5 flex items-center justify-center rounded-full">
+                        <span class="text-sm text-white font-semibold">2</span>
+                    </div>
+                    <div class="w-full h-[3px] mx-4 rounded-lg bg-slate-300"></div>
+                </div>
+                <div class="mt-2 mr-4">
+                    <h6 class="text-sm font-semibold text-slate-900">Checkout</h6>
+                </div>
+            </div>
+            <div>
+                <div class="flex items-center">
+                    <div
+                        class="w-8 h-8 shrink-0 mx-[-1px] bg-slate-300 p-1.5 flex items-center justify-center rounded-full">
+                        <span class="text-sm text-white font-semibold">3</span>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <h6 class="text-sm font-semibold text-slate-400">Order</h6>
+                </div>
+            </div>
+        </div>
+
+        <!-- main -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-y-12 gap-x-8 lg:gap-x-12">
+            <div class="lg:col-span-2">
+                <form>
+                    <h2 class="text-xl text-slate-900 font-semibold mb-6">Company Details</h2>
+                    <!-- Company identifiers -->
+                    <div class="grid lg:grid-cols-2 gap-y-6 gap-x-4">
+                        <div class="lg:col-span-2">
+                            <label class="text-sm text-slate-900 font-medium block mb-2">Legal company name</label>
+                            <input type="text" placeholder='e.g., "Example Clinic LLC", "SIA Example Clinic"'
+                                class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
+                        </div>
+
+                        <div>
+                            <label class="text-sm text-slate-900 font-medium block mb-2">Company registration
+                                number</label>
+                            <input type="text" placeholder="Registration number"
+                                class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
+                        </div>
+
+                        <div>
+                            <label class="text-sm text-slate-900 font-medium block mb-2">Tax ID (VAT)</label>
+                            <input type="text" placeholder="e.g., LV12345678901 / VAT / Tax ID"
+                                class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
+                        </div>
+
+                        <div class="lg:col-span-2">
+                            <label class="text-sm text-slate-900 font-medium block mb-2">Registered address</label>
+                            <input type="text" placeholder="Street, building, suite, city, ZIP/postcode, country"
+                                class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
+                        </div>
+
+                        <div class="lg:col-span-2">
+                            <label class="text-sm text-slate-900 font-medium block mb-2">Billing address <span
+                                    class="text-slate-400">(if different)</span></label>
+                            <input type="text" placeholder="Street, building, suite, city, ZIP/postcode, country"
+                                class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
+                        </div>
+
+                        <div class="lg:col-span-2">
+                            <label class="text-sm text-slate-900 font-medium block mb-2">Delivery address <span
+                                    class="text-slate-400">(if different)</span></label>
+                            <input type="text" placeholder="Warehouse / pharmacy / clinic — address, entrance, note"
+                                class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
+                        </div>
+                    </div>
+                    <!-- Contact person -->
+                    <h3 class="text-base text-slate-900 font-semibold mt-10 mb-4">Contact person</h3>
+                    <div class="grid lg:grid-cols-2 gap-y-6 gap-x-4">
+                        <div>
+                            <label class="text-sm text-slate-900 font-medium block mb-2">Full name</label>
+                            <input type="text" placeholder="First and last name"
+                                class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
+                        </div>
+                        <div>
+                            <label class="text-sm text-slate-900 font-medium block mb-2">Position / title</label>
+                            <input type="text" placeholder="Procurement / Head physician / Pharmacy manager"
+                                class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
+                        </div>
+                        <div>
+                            <label class="text-sm text-slate-900 font-medium block mb-2">Work email</label>
+                            <input type="email" placeholder="clinic.procurement@example.com"
+                                class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
+                        </div>
+                        <div>
+                            <label class="text-sm text-slate-900 font-medium block mb-2">Work phone</label>
+                            <input type="tel" placeholder="+371 0000 0000"
+                                class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
+                        </div>
+                    </div>
+                    <!-- Payment details -->
+                    <h3 class="text-base text-slate-900 font-semibold mt-10 mb-4">Payment details</h3>
+                    <div class="grid lg:grid-cols-2 gap-y-6 gap-x-4">
+                        <div>
+                            <label class="text-sm text-slate-900 font-medium block mb-2">IBAN</label>
+                            <input type="text" placeholder="LV00BANK0000000000000"
+                                class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
+                        </div>
+                        <div>
+                            <label class="text-sm text-slate-900 font-medium block mb-2">BIC / SWIFT</label>
+                            <input type="text" placeholder="BANKLV2X / ABCDGB2L"
+                                class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
+                        </div>
+                        <div class="lg:col-span-2">
+                            <label class="text-sm text-slate-900 font-medium block mb-2">Bank name</label>
+                            <input type="text" placeholder="Bank and branch name"
+                                class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- Order summary -->
+            <div class="relative">
+                <h2 class="text-xl text-slate-900 font-semibold mb-6">Order Summary</h2>
+                <ul class="text-slate-600 font-medium space-y-4">
+                    <li class="flex flex-wrap gap-4 text-sm">Subtotal
+                        <span class="ml-auto font-semibold text-slate-900">€72.00</span>
+                    </li>
+                    <li class="flex flex-wrap gap-4 text-sm">Shipping
+                        <span class="ml-auto font-semibold text-slate-900">€6.00</span>
+                    </li>
+                    <hr class="border-slate-300" />
+                    <li class="flex flex-wrap gap-4 text-[15px] font-semibold text-slate-900">Total
+                        <span class="ml-auto">€78.00</span>
+                    </li>
+                </ul>
+
+                <div class="space-y-4 mt-8">
+                    <a href="{% url 'order' %}"
+                        class="rounded-lg px-4 py-2.5 w-full text-sm font-medium tracking-wide
+                    border border-[#07beb8] text-[#07beb8] hover:bg-[#07beb8] hover:text-white transition block text-center">
+                        Confirm order
+                    </a>
+                    <a href="{% url 'cart' %}"
+                        class="rounded-lg px-4 py-2.5 w-full text-sm font-medium tracking-wide
+                    border border-[#07beb8] text-[#07beb8] hover:bg-[#07beb8] hover:text-white transition block text-center">
+                        Back to Cart
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
