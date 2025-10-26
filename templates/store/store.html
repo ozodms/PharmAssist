@@ -1,0 +1,110 @@
+{% extends 'store/main.html' %}
+{% load static %}
+
+{% block title %}Store — PharmAssist{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-16">
+    <div class="grid w-fit mx-auto grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <article class="w-[280px] rounded-xl overflow-hidden shadow">
+            <div class="group h-64 rounded-md bg-white border-2 border-dashed border-[#07beb8]/40
+                  flex items-center justify-center transition-colors duration-300
+                  hover:border-[#07beb8] hover:bg-[#07beb8]/5">
+                <img src="{% static 'store/img/pills1.png' %}" alt="Paracetamol 500 mg"
+                    class="max-h-full max-w-full object-contain transition-transform duration-300 ease-out group-hover:-translate-y-2" />
+            </div>
+
+            <div class="p-4">
+                <h3 class="text-sm font-semibold text-gray-900">Paracetamol 500 mg</h3>
+                <p class="mt-1 text-xs text-gray-500">Country: Germany</p>
+                <p class="mt-2 text-base font-bold text-gray-900">€3.50</p>
+
+                <div class="mt-4 flex gap-2">
+                    <button class="w-1/2 px-4 py-2 border-2 border-[#07beb8] rounded-lg transition
+                         hover:bg-[#07beb8] hover:text-white">Add to Cart</button>
+                    <a href="{% url 'order_item' %}" class="w-1/2 px-4 py-2 text-center border-2 border-[#07beb8] rounded-lg transition
+                         hover:bg-[#07beb8] hover:text-white">
+                        View
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <!-- Карточка 2 -->
+        <article class="w-[280px] rounded-xl overflow-hidden shadow">
+            <div class="group h-64 rounded-md bg-white border-2 border-dashed border-[#07beb8]/40
+                  flex items-center justify-center transition-colors duration-300
+                  hover:border-[#07beb8] hover:bg-[#07beb8]/5">
+                <img src="{% static 'store/img/pills2.png' %}" alt="Vitamin C 1000 mg"
+                    class="max-h-full max-w-full object-contain transition-transform duration-300 ease-out group-hover:-translate-y-2" />
+            </div>
+
+            <div class="p-4">
+                <h3 class="text-sm font-semibold text-gray-900">Vitamin C 1000 mg</h3>
+                <p class="mt-1 text-xs text-gray-500">Country: Latvia</p>
+                <p class="mt-2 text-base font-bold text-gray-900">€4.20</p>
+
+                <div class="mt-4 flex gap-2">
+                    <button class="w-1/2 px-4 py-2 border-2 border-[#07beb8] rounded-lg transition
+                         hover:bg-[#07beb8] hover:text-white">Add to Cart</button>
+                    <a href="{% url 'order_item' %}" class="w-1/2 px-4 py-2 text-center border-2 border-[#07beb8] rounded-lg transition
+                         hover:bg-[#07beb8] hover:text-white">
+                        View
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <!-- Карточка 3 -->
+        <article class="w-[280px] rounded-xl overflow-hidden shadow">
+            <div class="group h-64 rounded-md bg-white border-2 border-dashed border-[#07beb8]/40
+                  flex items-center justify-center transition-colors duration-300
+                  hover:border-[#07beb8] hover:bg-[#07beb8]/5">
+                <img src="{% static 'store/img/pills3.png' %}" alt="Ibuprofen 200 mg"
+                    class="max-h-full max-w-full object-contain transition-transform duration-300 ease-out group-hover:-translate-y-2" />
+            </div>
+
+            <div class="p-4">
+                <h3 class="text-sm font-semibold text-gray-900">Ibuprofen 200 mg</h3>
+                <p class="mt-1 text-xs text-gray-500">Country: USA</p>
+                <p class="mt-2 text-base font-bold text-gray-900">€2.80</p>
+
+                <div class="mt-4 flex gap-2">
+                    <button class="w-1/2 px-4 py-2 border-2 border-[#07beb8] rounded-lg transition
+                         hover:bg-[#07beb8] hover:text-white">Add to Cart</button>
+                    <a href="{% url 'order_item' %}" class="w-1/2 px-4 py-2 text-center border-2 border-[#07beb8] rounded-lg transition
+                         hover:bg-[#07beb8] hover:text-white">
+                        View
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <!-- Карточка 4 -->
+        <article class="w-[280px] rounded-xl overflow-hidden shadow">
+            <div class="group h-64 rounded-md bg-white border-2 border-dashed border-[#07beb8]/40
+                  flex items-center justify-center transition-colors duration-300
+                  hover:border-[#07beb8] hover:bg-[#07beb8]/5">
+                <img src="{% static 'store/img/pills4.png' %}" alt="Omega-3 Complex"
+                    class="max-h-full max-w-full object-contain transition-transform duration-300 ease-out group-hover:-translate-y-2" />
+            </div>
+
+            <div class="p-4">
+                <h3 class="text-sm font-semibold text-gray-900">Omega-3 Complex</h3>
+                <p class="mt-1 text-xs text-gray-500">Country: Sweden</p>
+                <p class="mt-2 text-base font-bold text-gray-900">€8.90</p>
+
+                <div class="mt-4 flex gap-2">
+                    <button class="w-1/2 px-4 py-2 border-2 border-[#07beb8] rounded-lg transition
+                         hover:bg-[#07beb8] hover:text-white">Add to Cart</button>
+                    <a href="{% url 'order_item' %}" class="w-1/2 px-4 py-2 text-center border-2 border-[#07beb8] rounded-lg transition
+                         hover:bg-[#07beb8] hover:text-white">
+                        View
+                    </a>
+                </div>
+            </div>
+        </article>
+
+    </div>
+</div>
+{% endblock content %}
