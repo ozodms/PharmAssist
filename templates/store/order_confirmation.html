@@ -1,0 +1,171 @@
+{% extends 'store/main.html' %}
+{% load static %}
+
+{% block title %}Order — PharmAssist{% endblock %}
+
+{% block content %}
+<div class="bg-white sm:px-8 px-4 py-6">
+    <div class="max-w-screen-lg mx-auto">
+        <div class="print:hidden">
+            <div class="flex flex-col lg:flex-row items-start lg:items-end gap-6 mb-12 w-full">
+                <div class="flex-1 min-w-[120px]">
+                    <div class="flex items-center w-full">
+                        <div class="w-8 h-8 shrink-0 bg-[#07beb8] flex items-center justify-center rounded-full">
+                            <span class="text-sm text-white font-semibold">1</span>
+                        </div>
+                        <div class="flex-1 h-[3px] mx-4 rounded-lg bg-[#07beb8]"></div>
+                    </div>
+                    <div class="mt-2">
+                        <h6 class="text-sm font-semibold text-slate-900 text-center lg:text-left">Cart</h6>
+                    </div>
+                </div>
+                <div class="flex-1 min-w-[120px]">
+                    <div class="flex items-center w-full">
+                        <div class="w-8 h-8 shrink-0 bg-[#07beb8] flex items-center justify-center rounded-full">
+                            <span class="text-sm text-white font-semibold">2</span>
+                        </div>
+                        <div class="flex-1 h-[3px] mx-4 rounded-lg bg-[#07beb8]"></div>
+                    </div>
+                    <div class="mt-2">
+                        <h6 class="text-sm font-semibold text-slate-900 text-center lg:text-left">Checkout</h6>
+                    </div>
+                </div>
+                <div class="flex-1 min-w-[120px]">
+                    <div class="flex items-center justify-start">
+                        <div class="w-8 h-8 shrink-0 bg-[#07beb8] flex items-center justify-center rounded-full">
+                            <span class="text-sm text-white font-semibold">3</span>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <h6 class="text-sm font-semibold text-slate-900 text-center lg:text-left">Order</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mb-10">
+            <img src="{% static 'store/img/logo.png' %}" alt="PharmAssist"
+                class="mx-auto h-24 w-24 rounded-full mb-6 print:mb-3 shadow-md" />
+            <h1 class="text-2xl sm:text-3xl font-bold text-slate-900">Order confirmed</h1>
+            <p class="mt-2 text-sm text-slate-600">
+                Thank you for your purchase! Your order has been received and is being processed.
+            </p>
+            <p class="mt-1 text-sm font-medium text-slate-900">
+                Order № <span class="text-[#07beb8]">
+                    {{ order.number|default:"PA-2025-0001" }}
+                </span>
+            </p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm ring-1 ring-black/5 overflow-hidden">
+            <div class="px-6 py-5 border-b border-slate-200 grid sm:grid-cols-2 gap-4">
+                <div>
+                    <h3 class="text-sm font-semibold text-slate-900">Billed to</h3>
+                    <p class="mt-1 text-sm text-slate-700">
+                        {{ order.company_name|default:"Example Clinic LLC" }}<br>
+                        {{ order.company_reg|default:"Reg No.: 12345678" }}<br>
+                        {{ order.vat|default:"VAT: LV12345678901" }}<br>
+                        {{ order.billing_address|default:"1 Street Name, City, ZIP, Country" }}
+                    </p>
+                </div>
+                <div class="sm:text-right">
+                    <h3 class="text-sm font-semibold text-slate-900">Order details</h3>
+                    <p class="mt-1 text-sm text-slate-700">
+                        Date: {{ order.date|date:"Y-m-d"|default:"2025-10-26" }}<br>
+                        Payment: {{ order.payment_method|default:"Invoice" }}<br>
+                        Delivery: {{ order.delivery_method|default:"Standard" }}
+                    </p>
+                </div>
+            </div>
+            <div class="px-6 py-4">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="text-left text-slate-500">
+                            <th class="py-2">Item</th>
+                            <th class="py-2">Qty</th>
+                            <th class="py-2">Unit price</th>
+                            <th class="py-2 text-right">Line total</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 text-slate-900">
+                        {% for item in order.items %}
+                        <tr>
+                            <td class="py-3">
+                                <div class="font-medium">{{ item.name }}</div>
+                                <div class="text-slate-500 text-xs">{{ item.note }}</div>
+                            </td>
+                            <td class="py-3">{{ item.qty }}</td>
+                            <td class="py-3">€{{ item.unit_price }}</td>
+                            <td class="py-3 text-right font-semibold">€{{ item.line_total }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td class="py-3">
+                                <div class="font-medium">Paracetamol 500 mg</div>
+                                <div class="text-slate-500 text-xs">Blister pack</div>
+                            </td>
+                            <td class="py-3">2</td>
+                            <td class="py-3">€20.00</td>
+                            <td class="py-3 text-right font-semibold">€40.00</td>
+                        </tr>
+                        <tr>
+                            <td class="py-3">
+                                <div class="font-medium">Vitamin C 1000 mg</div>
+                                <div class="text-slate-500 text-xs">Bottle 60 tabs</div>
+                            </td>
+                            <td class="py-3">1</td>
+                            <td class="py-3">€12.00</td>
+                            <td class="py-3 text-right font-semibold">€12.00</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="px-6 py-5 border-t border-slate-200">
+                <div class="max-w-sm ml-auto space-y-2 text-sm">
+                    <div class="flex">
+                        <span class="text-slate-600">Subtotal</span>
+                        <span class="ml-auto font-semibold text-slate-900">
+                            €{{ order.subtotal|default:"52.00" }}
+                        </span>
+                    </div>
+                    <div class="flex">
+                        <span class="text-slate-600">Shipping</span>
+                        <span class="ml-auto font-semibold text-slate-900">
+                            €{{ order.shipping|default:"6.00" }}
+                        </span>
+                    </div>
+                    <div class="flex">
+                        <span class="text-slate-600">Tax</span>
+                        <span class="ml-auto font-semibold text-slate-900">
+                            €{{ order.tax|default:"5.00" }}
+                        </span>
+                    </div>
+                    <hr class="border-slate-200">
+                    <div class="flex text-[15px]">
+                        <span class="font-semibold text-slate-900">Total</span>
+                        <span class="ml-auto font-semibold text-slate-900">
+                            €{{ order.total|default:"63.00" }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-8 flex flex-wrap gap-3 print:hidden">
+            <a href="{% url 'store' %}"
+                class="rounded-lg px-4 py-2.5 text-sm font-medium border border-[#07beb8] text-[#07beb8] hover:bg-[#07beb8] hover:text-white transition">
+                Back to Store
+            </a>
+            <a href="#" onclick="window.print()"
+                class="rounded-lg px-4 py-2.5 text-sm font-medium bg-[#07beb8] hover:bg-[#07beb8]/90 text-white transition">
+                Print / Save as PDF
+            </a>
+        </div>
+
+        <div class="hidden print:block text-center text-xs text-slate-500 mt-6">
+            Generated by PharmAssist • {{ order.date|date:"Y-m-d H:i"|default:"2025-10-26 12:00" }}
+        </div>
+
+    </div>
+</div>
+{% endblock content %}
