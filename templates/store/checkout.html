@@ -135,30 +135,53 @@
                 </form>
             </div>
             <!-- Order summary -->
+            <!-- RIGHT: ORDER SUMMARY -->
             <div class="relative">
                 <h2 class="text-xl text-slate-900 font-semibold mb-6">Order Summary</h2>
-                <ul class="text-slate-600 font-medium space-y-4">
-                    <li class="flex flex-wrap gap-4 text-sm">Subtotal
-                        <span class="ml-auto font-semibold text-slate-900">€72.00</span>
-                    </li>
-                    <li class="flex flex-wrap gap-4 text-sm">Shipping
-                        <span class="ml-auto font-semibold text-slate-900">€6.00</span>
+
+                <!-- items -->
+                <div class="space-y-4 mb-6">
+                    {% for item in items %}
+                    <div class="flex items-start gap-4">
+                        <div
+                            class="min-w-12 min-h-12 w-12 h-12 rounded-md border border-[#07beb8]/30 bg-white flex items-center justify-center overflow-hidden">
+                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}"
+                                class="w-full h-full object-contain">
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex justify-between gap-4">
+                                <p class="text-sm font-semibold text-slate-900">{{ item.product.name }}</p>
+                                <p class="text-sm font-semibold text-slate-900">€{{ item.get_total|floatformat:2 }}</p>
+                            </div>
+                            <p class="text-xs text-slate-600 mt-0.5">
+                                €{{ item.product.price|floatformat:2 }} × {{ item.quantity }}
+                            </p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <ul class="text-slate-600 font-medium space-y-3">
+                    <li class="flex flex-wrap gap-4 text-sm">
+                        Subtotal
+                        <span class="ml-auto font-semibold text-slate-900">€{{ order.get_cart_total|floatformat:2 }}</span>
                     </li>
                     <hr class="border-slate-300" />
-                    <li class="flex flex-wrap gap-4 text-[15px] font-semibold text-slate-900">Total
-                        <span class="ml-auto">€78.00</span>
+                    <li class="flex flex-wrap gap-4 text-[15px] font-semibold text-slate-900">
+                        Total
+                        <span class="ml-auto">€{{ order.get_cart_total|floatformat:2 }}</span>
                     </li>
                 </ul>
 
                 <div class="space-y-4 mt-8">
                     <a href="{% url 'order' %}"
                         class="rounded-lg px-4 py-2.5 w-full text-sm font-medium tracking-wide
-                    border border-[#07beb8] text-[#07beb8] hover:bg-[#07beb8] hover:text-white transition block text-center">
+                border border-[#07beb8] text-[#07beb8] hover:bg-[#07beb8] hover:text-white transition block text-center">
                         Confirm order
                     </a>
                     <a href="{% url 'cart' %}"
                         class="rounded-lg px-4 py-2.5 w-full text-sm font-medium tracking-wide
-                    border border-[#07beb8] text-[#07beb8] hover:bg-[#07beb8] hover:text-white transition block text-center">
+                border border-[#07beb8] text-[#07beb8] hover:bg-[#07beb8] hover:text-white transition block text-center">
                         Back to Cart
                     </a>
                 </div>

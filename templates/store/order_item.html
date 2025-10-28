@@ -1,54 +1,75 @@
 {% extends 'store/main.html' %}
 {% load static %}
 
-{% block title %}Product — PharmAssist{% endblock %}
+{% block title %}{{ product.name }} — PharmAssist{% endblock %}
 
 {% block content %}
 <div class="bg-white py-12 px-6 sm:px-12">
-  <div class="max-w-5xl mx-auto">
+    <div class="max-w-5xl mx-auto">
 
-    <div class="mb-8">
-      <a href="{% url 'store' %}"
-         class="inline-flex items-center text-[#07beb8] font-medium hover:underline transition">
-        ← Back to Store
-      </a>
-    </div>
-
-    <div class="grid md:grid-cols-2 gap-10 items-start">
-      <div class="flex justify-center">
-        <div
-          class="group relative w-full max-w-sm h-96 rounded-xl border-2 border-dashed border-[#07beb8]/40 bg-white flex items-center justify-center transition-colors duration-300 hover:border-[#07beb8] hover:bg-[#07beb8]/5">
-          <img src="{% static 'store/img/pills1.png' %}" alt="Paracetamol 500 mg"
-               class="max-h-full max-w-full object-contain transition-transform duration-300 ease-out group-hover:-translate-y-2" />
+        <div class="mb-10">
+            <a href="{% url 'store' %}"
+                class="inline-flex items-center text-[#07beb8] font-medium hover:underline transition">
+                ← Back to Store
+            </a>
         </div>
-      </div>
+        <!-- Main grid -->
+        <div class="grid md:grid-cols-2 gap-12 items-start">
+            <div class="flex justify-center">
+                <div
+                    class="group relative w-full max-w-sm h-[420px] rounded-xl border-2 border-dashed border-[#07beb8]/40 bg-white flex items-center justify-center transition-colors duration-300 hover:border-[#07beb8] hover:bg-[#07beb8]/5 shadow-sm">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}"
+                        class="max-h-full max-w-full object-contain transition-transform duration-300 ease-out group-hover:-translate-y-2" />
+                </div>
+            </div>
 
-      <div>
-        <h1 class="text-2xl font-semibold text-slate-900 mb-3">Paracetamol 500 mg</h1>
-        <p class="text-sm text-gray-500 mb-2">Manufacturer: Germany</p>
-        <p class="text-base text-slate-700 leading-relaxed mb-6">
-          Paracetamol 500 mg is a widely used pain reliever and fever reducer suitable for
-          mild to moderate pain such as headaches, muscle aches, arthritis, backache, toothaches,
-          and colds. Always follow your doctor’s recommendation and do not exceed the prescribed dose.
-        </p>
+            <div class="space-y-5">
+                <h1 class="text-3xl font-semibold text-slate-900">{{ product.name }}</h1>
+                <p class="text-base text-[#07beb8] font-medium tracking-wide">{{ product.brand }} — {{ product.country}}</p>
 
-        <p class="text-xl font-bold text-gray-900 mb-6">€3.50</p>
+                <div class="space-y-3 pt-4">
+                    <p class="text-[15px] text-slate-700 leading-relaxed">
+                        {{ product.description }}
+                    </p>
+                    <p class="text-[15px] text-slate-700 leading-relaxed">
+                        <span class="font-semibold text-slate-900">Ingredients:</span> {{ product.ingredients }}
+                    </p>
+                    <p class="text-[15px] text-slate-700 leading-relaxed">
+                        <span class="font-semibold text-slate-900">Package quantity:</span> {{ product.package_quantity }}
+                    </p>
+                </div>
 
-        <div class="flex items-center gap-6">
-          <div class="inline-flex items-center rounded-lg border border-gray-300">
-            <button type="button" class="px-3 py-1.5 text-slate-700 hover:bg-slate-50">−</button>
-            <span class="px-4 py-1.5 text-slate-900 font-medium select-none">1</span>
-            <button type="button" class="px-3 py-1.5 text-slate-700 hover:bg-slate-50">+</button>
-          </div>
+                <div class="mt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div class="text-sm text-slate-600 bg-gray-50 rounded-lg px-4 py-2">
+                        <span class="font-medium text-slate-900">Availability:</span>
+                        {{ product.availability }} in stock
+                    </div>
 
-          <button
-            class="px-6 py-2 border-2 border-[#07beb8] text-black bg-white rounded-lg transition hover:bg-[#07beb8] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#07beb8]">
-            Add to Cart
-          </button>
+                    <p class="text-2xl font-bold text-slate-900 tracking-wide">
+                        €{{ product.price }}
+                    </p>
+                </div>
+
+                <div class="pt-6 flex items-center gap-6 flex-wrap">
+                    <div class="flex items-center gap-3">
+                        <span class="text-sm text-slate-700 font-medium">Quantity:</span>
+                        <div class="inline-flex items-center rounded-lg border border-gray-300">
+                            <button type="button"
+                                class="px-3 py-1.5 text-slate-700 hover:bg-slate-50 transition">−</button>
+                            <span class="px-4 py-1.5 text-slate-900 font-medium select-none">1</span>
+                            <button type="button"
+                                class="px-3 py-1.5 text-slate-700 hover:bg-slate-50 transition">+</button>
+                        </div>
+                    </div>
+
+                    <button
+                        class="px-6 py-2.5 border-2 border-[#07beb8] text-[#07beb8] font-medium rounded-lg transition hover:bg-[#07beb8] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#07beb8]">
+                        Add to Cart
+                    </button>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
 
-  </div>
+    </div>
 </div>
 {% endblock content %}

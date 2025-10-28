@@ -5,7 +5,8 @@
 
 {% block content %}
 
-<div class="flex flex-col lg:flex-row items-start lg:items-end gap-6">
+<!-- PROGRESS BAR -->
+<div class="flex flex-col lg:flex-row items-start lg:items-end gap-6 mb-12">
     <div class="w-full">
         <div class="flex items-center w-full">
             <div class="w-8 h-8 shrink-0 mx-[-1px] bg-[#07beb8] p-1.5 flex items-center justify-center rounded-full">
@@ -17,6 +18,7 @@
             <h6 class="text-sm font-semibold text-slate-900">Cart</h6>
         </div>
     </div>
+
     <div class="w-full">
         <div class="flex items-center w-full">
             <div class="w-8 h-8 shrink-0 mx-[-1px] bg-slate-300 p-1.5 flex items-center justify-center rounded-full">
@@ -28,6 +30,7 @@
             <h6 class="text-sm font-semibold text-slate-400">Checkout</h6>
         </div>
     </div>
+
     <div>
         <div class="flex items-center">
             <div class="w-8 h-8 shrink-0 mx-[-1px] bg-slate-300 p-1.5 flex items-center justify-center rounded-full">
@@ -40,71 +43,82 @@
     </div>
 </div>
 
-<!-- Main content -->
+<!-- MAIN CONTENT -->
 <div class="mx-auto max-w-screen-2xl px-6 py-12">
     <div class="grid lg:grid-cols-3 gap-8">
+
+        <!-- CART ITEMS -->
         <section class="lg:col-span-2 bg-white p-6 rounded-xl shadow-sm ring-1 ring-black/5">
-            <h3 class="text-xl font-semibold text-slate-900">Your Cart</h3>
-            <hr class="border-gray-200 mt-4 mb-8" />
-            <div class="space-y-8">
-                <div class="grid sm:grid-cols-5 gap-6 items-start">
-                    <div class="sm:col-span-2 flex items-center justify-center">
-                        <div
-                            class="group w-40 h-40 md:w-48 md:h-48 rounded-lg bg-white border-2 border-dashed border-[#07beb8]/40 flex items-center justify-center transition-colors duration-300 hover:border-[#07beb8] hover:bg-[#07beb8]/5">
-                            <img src="{% static 'store/img/pills1.png' %}" alt="Paracetamol 500 mg"
-                                class="max-w-full max-h-full object-contain transition-transform duration-300 ease-out group-hover:-translate-y-2" />
-                        </div>
-                    </div>
-                    <div class="sm:col-span-3 flex flex-col justify-between h-full">
-                        <div>
-                            <div class="flex justify-between items-start">
-                                <h4 class="text-base font-semibold text-slate-900">Paracetamol 500 mg</h4>
-                                <p class="text-base font-semibold text-slate-900">€20.00</p>
-                            </div>
-                            <p class="mt-2 text-sm text-slate-600 leading-relaxed">Lorem ipsum, dolor sit amet consectetur adipisicing elit.</p>
-                            <p class="mt-2 text-sm text-slate-600 leading-relaxed">Lorem ipsum, dolor sit amet consectetur adipisicing elit.</p>
-                            <p class="mt-2 text-sm text-slate-600 leading-relaxed">Lorem ipsum, dolor sit amet consectetur adipisicing elit.</p>
-                            <p class="mt-2 text-sm text-slate-600 leading-relaxed">Lorem ipsum, dolor sit amet consectetur adipisicing elit.</p>
-                        </div>
-                        <div class="mt-4 flex justify-between items-center">
-                            <div class="inline-flex items-center rounded-lg border border-gray-300">
-                                <button type="button" class="px-3 py-1.5 text-slate-700 hover:bg-slate-50">−</button>
-                                <span class="px-4 py-1.5 text-slate-900 font-medium select-none">2</span>
-                                <button type="button" class="px-3 py-1.5 text-slate-700 hover:bg-slate-50">+</button>
-                            </div>
+            <h3 class="text-xl font-semibold text-slate-900 mb-6">Your Cart</h3>
+            <hr class="border-gray-200 mb-8" />
 
-                            <div class="text-sm font-medium text-slate-900">
-                                Subtotal: <span class="font-semibold">€40.00</span>
-                            </div>
-                        </div>
-
-                        <button type="button"
-                            class="mt-3 text-xs font-medium text-red-500 hover:text-red-600">Remove</button>
+            {% for item in items %}
+            <div class="grid sm:grid-cols-5 gap-6 items-start mb-10">
+                <!-- PRODUCT IMAGE -->
+                <div class="sm:col-span-2 flex items-center justify-center">
+                    <div
+                        class="group w-40 h-40 md:w-48 md:h-48 rounded-lg bg-white border-2 border-dashed border-[#07beb8]/40 flex items-center justify-center transition-colors duration-300 hover:border-[#07beb8] hover:bg-[#07beb8]/5">
+                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}"
+                            class="max-w-full max-h-full object-contain transition-transform duration-300 ease-out group-hover:-translate-y-2" />
                     </div>
                 </div>
 
-                <hr class="border-gray-100" />
+                <!-- PRODUCT DETAILS -->
+                <div class="sm:col-span-3 flex flex-col justify-between h-full">
+                    <div>
+                        <div class="flex justify-between items-start mb-1">
+                            <h4 class="text-base font-semibold text-slate-900">{{ item.product.name }}</h4>
+                            <p class="text-base font-semibold text-slate-900">€{{ item.product.price }}</p>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-1">{{ item.product.brand }} — {{ item.product.country }}</p>
+                        <p class="text-sm text-slate-600 leading-relaxed mb-2">{{item.product.description}}</p>
 
+                        <p class="text-xs text-gray-400">Package: {{ item.product.package_quantity }} units</p>
+                        <p class="text-xs text-gray-400">Available: {{ item.product.availability }}</p>
+                    </div>
+
+                    <!-- Quantity + Subtotal -->
+                    <div class="mt-4 flex justify-between items-center">
+                        <div class="inline-flex items-center rounded-lg border border-gray-300">
+                            <button type="button" class="px-3 py-1.5 text-slate-700 hover:bg-slate-50">−</button>
+                            <span class="px-4 py-1.5 text-slate-900 font-medium select-none">{{ item.quantity }}</span>
+                            <button type="button" class="px-3 py-1.5 text-slate-700 hover:bg-slate-50">+</button>
+                        </div>
+
+                        <div class="text-sm font-medium text-slate-900">
+                            Subtotal: <span class="font-semibold">€{{ item.get_total|floatformat:2 }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Remove -->
+                    <button type="button"
+                        class="mt-3 text-xs font-medium text-red-500 hover:text-red-600">Remove</button>
+                </div>
             </div>
+            {% endfor %}
         </section>
 
+        <!-- ORDER SUMMARY -->
         <aside class="bg-white rounded-xl p-6 h-max shadow-sm ring-1 ring-black/5 md:sticky top-6">
-            <h3 class="text-xl font-semibold text-slate-900">Order details</h3>
-            <hr class="border-gray-200 mt-4 mb-8" />
+            <h3 class="text-xl font-semibold text-slate-900 mb-6">Order Summary</h3>
+            <hr class="border-gray-200 mb-8" />
 
             <ul class="text-slate-600 font-medium space-y-3 text-sm">
                 <li class="flex gap-4 text-slate-900">
-                    Total <span class="ml-auto font-semibold">€40.00</span>
+                    Total <span class="ml-auto font-semibold">€{{ order.get_cart_total|default:"0.00" }}</span>
+                </li>
+                <li class="flex gap-4 text-slate-900">
+                    Total items<span class="ml-auto font-semibold">€{{ order.get_cart_items }}</span>
                 </li>
             </ul>
 
             <div class="mt-8 space-y-3">
-                <a href="{% url 'checkout' %}" class="block text-center text-sm px-4 py-2.5 w-full font-medium rounded-lg border transition
-                  border-[#07beb8] text-[#07beb8] hover:bg-[#07beb8] hover:text-white">
+                <a href="{% url 'checkout' %}"
+                    class="block text-center text-sm px-4 py-2.5 w-full font-medium rounded-lg border transition border-[#07beb8] text-[#07beb8] hover:bg-[#07beb8] hover:text-white">
                     Checkout
                 </a>
-                <a href="{% url 'store' %}" class="block text-center text-sm px-4 py-2.5 w-full font-medium rounded-lg border transition
-                  border-[#07beb8] text-[#07beb8] hover:bg-[#07beb8] hover:text-white">
+                <a href="{% url 'store' %}"
+                    class="block text-center text-sm px-4 py-2.5 w-full font-medium rounded-lg border transition border-[#07beb8] text-[#07beb8] hover:bg-[#07beb8] hover:text-white">
                     Continue Shopping
                 </a>
             </div>
@@ -112,4 +126,5 @@
 
     </div>
 </div>
+
 {% endblock content %}
