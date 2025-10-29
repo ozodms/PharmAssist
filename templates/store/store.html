@@ -23,8 +23,10 @@
                 <p class="mt-2 text-base font-bold text-gray-900">€{{ product.price }}</p>
 
                 <div class="mt-4 flex gap-2">
-                    <button class="w-1/2 px-4 py-2 border-2 border-[#07beb8] rounded-lg transition
-                         hover:bg-[#07beb8] hover:text-white">Add to Cart</button>
+                    <button type="button" data-product="{{ product.id }}" data-action="add"
+                        class="w-1/2 px-4 py-2 border-2 border-[#07beb8] rounded-lg transition hover:bg-[#07beb8] hover:text-white update-cart">
+                        Add to Cart
+                    </button>
                     <a href="{% url 'order_item' product.id %}"
                         class="w-1/2 px-4 py-2 text-center border-2 border-[#07beb8] rounded-lg transition hover:bg-[#07beb8] hover:text-white">
                         View
