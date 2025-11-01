@@ -46,46 +46,62 @@
         <!-- main -->
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-y-12 gap-x-8 lg:gap-x-12">
             <div class="lg:col-span-2">
-                <form>
+                <form id="checkout-form">
                     <h2 class="text-xl text-slate-900 font-semibold mb-6">Company Details</h2>
 
                     <div class="grid lg:grid-cols-2 gap-y-6 gap-x-4">
                         <div class="lg:col-span-2">
-                            <label class="text-sm text-slate-900 font-medium block mb-2">Legal company name</label>
-                            <input type="text" placeholder='e.g., "Example Clinic LLC", "SIA Example Clinic"'
+                            <label class="text-sm text-slate-900 font-medium block mb-2" for="legal_name">
+                                Legal company name
+                            </label>
+                            <input id="legal_name" name="legal_name" type="text" required
+                                placeholder='e.g., "Example Clinic LLC", "SIA Example Clinic"'
                                 class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
                         </div>
 
                         <div>
-                            <label class="text-sm text-slate-900 font-medium block mb-2">Company registration
-                                number</label>
-                            <input type="text" placeholder="Registration number"
+                            <label class="text-sm text-slate-900 font-medium block mb-2" for="reg_number">
+                                Company registration number
+                            </label>
+                            <input id="reg_number" name="reg_number" type="text" required
+                                placeholder="Registration number"
                                 class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
                         </div>
 
                         <div>
-                            <label class="text-sm text-slate-900 font-medium block mb-2">Tax ID (VAT)</label>
-                            <input type="text" placeholder="e.g., LV12345678901 / VAT / Tax ID"
+                            <label class="text-sm text-slate-900 font-medium block mb-2" for="tax_id">
+                                Tax ID (VAT)
+                            </label>
+                            <input id="tax_id" name="tax_id" type="text" required
+                                placeholder="e.g., LV12345678901 / VAT / Tax ID"
                                 class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
                         </div>
 
                         <div class="lg:col-span-2">
-                            <label class="text-sm text-slate-900 font-medium block mb-2">Registered address</label>
-                            <input type="text" placeholder="Street, building, suite, city, ZIP/postcode, country"
+                            <label class="text-sm text-slate-900 font-medium block mb-2" for="registered_address">
+                                Registered address
+                            </label>
+                            <input id="registered_address" name="registered_address" type="text" required
+                                placeholder="Street, building, suite, city, ZIP/postcode, country"
+                                class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
+                        </div>
+
+                        <!-- these two can be optional -->
+                        <div class="lg:col-span-2">
+                            <label class="text-sm text-slate-900 font-medium block mb-2" for="billing_address">
+                                Billing address <span class="text-slate-400">(if different)</span>
+                            </label>
+                            <input id="billing_address" name="billing_address" type="text"
+                                placeholder="Street, building, suite, city, ZIP/postcode, country"
                                 class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
                         </div>
 
                         <div class="lg:col-span-2">
-                            <label class="text-sm text-slate-900 font-medium block mb-2">Billing address <span
-                                    class="text-slate-400">(if different)</span></label>
-                            <input type="text" placeholder="Street, building, suite, city, ZIP/postcode, country"
-                                class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
-                        </div>
-
-                        <div class="lg:col-span-2">
-                            <label class="text-sm text-slate-900 font-medium block mb-2">Delivery address <span
-                                    class="text-slate-400">(if different)</span></label>
-                            <input type="text" placeholder="Warehouse / pharmacy / clinic — address, entrance, note"
+                            <label class="text-sm text-slate-900 font-medium block mb-2" for="delivery_address">
+                                Delivery address <span class="text-slate-400">(if different)</span>
+                            </label>
+                            <input id="delivery_address" name="delivery_address" type="text"
+                                placeholder="Warehouse / pharmacy / clinic — address, entrance, note"
                                 class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
                         </div>
                     </div>
@@ -93,23 +109,35 @@
                     <h3 class="text-base text-slate-900 font-semibold mt-10 mb-4">Contact person</h3>
                     <div class="grid lg:grid-cols-2 gap-y-6 gap-x-4">
                         <div>
-                            <label class="text-sm text-slate-900 font-medium block mb-2">Full name</label>
-                            <input type="text" placeholder="First and last name"
+                            <label class="text-sm text-slate-900 font-medium block mb-2" for="contact_name">
+                                Full name
+                            </label>
+                            <input id="contact_name" name="contact_name" type="text" required
+                                placeholder="First and last name"
                                 class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
                         </div>
                         <div>
-                            <label class="text-sm text-slate-900 font-medium block mb-2">Position / title</label>
-                            <input type="text" placeholder="Procurement / Head physician / Pharmacy manager"
+                            <label class="text-sm text-slate-900 font-medium block mb-2" for="contact_position">
+                                Position / title
+                            </label>
+                            <input id="contact_position" name="contact_position" type="text" required
+                                placeholder="Procurement / Head physician / Pharmacy manager"
                                 class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
                         </div>
                         <div>
-                            <label class="text-sm text-slate-900 font-medium block mb-2">Work email</label>
-                            <input type="email" placeholder="clinic.procurement@example.com"
+                            <label class="text-sm text-slate-900 font-medium block mb-2" for="contact_email">
+                                Work email
+                            </label>
+                            <input id="contact_email" name="contact_email" type="email" required
+                                placeholder="clinic.procurement@example.com"
                                 class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
                         </div>
                         <div>
-                            <label class="text-sm text-slate-900 font-medium block mb-2">Work phone</label>
-                            <input type="tel" placeholder="+371 0000 0000"
+                            <label class="text-sm text-slate-900 font-medium block mb-2" for="contact_phone">
+                                Work phone
+                            </label>
+                            <input id="contact_phone" name="contact_phone" type="tel" required
+                                placeholder="+371 0000 0000"
                                 class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
                         </div>
                     </div>
@@ -117,25 +145,32 @@
                     <h3 class="text-base text-slate-900 font-semibold mt-10 mb-4">Payment details</h3>
                     <div class="grid lg:grid-cols-2 gap-y-6 gap-x-4">
                         <div>
-                            <label class="text-sm text-slate-900 font-medium block mb-2">IBAN</label>
-                            <input type="text" placeholder="LV00BANK0000000000000"
+                            <label class="text-sm text-slate-900 font-medium block mb-2" for="iban">
+                                IBAN
+                            </label>
+                            <input id="iban" name="iban" type="text" required placeholder="LV00BANK0000000000000"
                                 class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
                         </div>
                         <div>
-                            <label class="text-sm text-slate-900 font-medium block mb-2">BIC / SWIFT</label>
-                            <input type="text" placeholder="BANKLV2X / ABCDGB2L"
+                            <label class="text-sm text-slate-900 font-medium block mb-2" for="swift">
+                                BIC / SWIFT
+                            </label>
+                            <input id="swift" name="swift" type="text" required placeholder="BANKLV2X / ABCDGB2L"
                                 class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
                         </div>
                         <div class="lg:col-span-2">
-                            <label class="text-sm text-slate-900 font-medium block mb-2">Bank name</label>
-                            <input type="text" placeholder="Bank and branch name"
+                            <label class="text-sm text-slate-900 font-medium block mb-2" for="bank_name">
+                                Bank name
+                            </label>
+                            <input id="bank_name" name="bank_name" type="text" required
+                                placeholder="Bank and branch name"
                                 class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
                         </div>
                     </div>
                 </form>
             </div>
 
-            <div class="relative">
+            <div class="relative lg:h-full flex flex-col">
                 <h2 class="text-xl text-slate-900 font-semibold mb-6">Order Summary</h2>
                 <div class="space-y-4 mb-6">
                     {% for item in items %}
@@ -166,19 +201,19 @@
                     </li>
                     <li class="flex flex-wrap gap-4 text-[15px] font-semibold text-slate-900">
                         Total
-                        <span class="ml-auto">€{{ order.get_cart_total|floatformat:2 }}</span>
+                        <span class="ml-auto">€{{ total|floatformat:2 }}</span>
                     </li>
                 </ul>
 
-                <div class="space-y-4 mt-8">
-                    <a href="{% url 'order' %}"
-                        class="rounded-lg px-4 py-2.5 w-full text-sm font-medium tracking-wide
-                border border-[#07beb8] text-[#07beb8] hover:bg-[#07beb8] hover:text-white transition block text-center">
+                <div class="space-y-4 mt-auto pt-8">
+                    <button id="confirm-order-btn" disabled class="rounded-lg px-4 py-2.5 w-full text-sm font-medium tracking-wide
+                                   border border-[#07beb8] text-slate-400 bg-slate-100 cursor-not-allowed
+                                   transition">
                         Confirm order
-                    </a>
+                    </button>
                     <a href="{% url 'cart' %}"
                         class="rounded-lg px-4 py-2.5 w-full text-sm font-medium tracking-wide
-                border border-[#07beb8] text-[#07beb8] hover:bg-[#07beb8] hover:text-white transition block text-center">
+                              border border-[#07beb8] text-[#07beb8] hover:bg-[#07beb8] hover:text-white transition block text-center">
                         Back to Cart
                     </a>
                 </div>
@@ -186,4 +221,36 @@
         </div>
     </div>
 </div>
+
+<!-- simple validation -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('checkout-form');
+        const btn = document.getElementById('confirm-order-btn');
+
+        if (!form || !btn) return;
+
+        function checkForm() {
+            const valid = form.checkValidity();
+            if (valid) {
+                btn.disabled = false;
+                btn.classList.remove('cursor-not-allowed', 'bg-slate-100', 'text-slate-400');
+                btn.classList.add('text-[#07beb8]', 'hover:bg-[#07beb8]', 'hover:text-white', 'bg-white');
+            } else {
+                btn.disabled = true;
+                btn.classList.add('cursor-not-allowed', 'bg-slate-100', 'text-slate-400');
+                btn.classList.remove('text-[#07beb8]', 'hover:bg-[#07beb8]', 'hover:text-white', 'bg-white');
+            }
+        }
+
+        form.addEventListener('input', checkForm);
+        checkForm();
+
+
+        btn.addEventListener('click', (e) => {
+            if (btn.disabled) return;
+            window.location.href = "{% url 'order' %}";
+        });
+    });
+</script>
 {% endblock content %}
