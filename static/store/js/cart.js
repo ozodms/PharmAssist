@@ -1,21 +1,31 @@
-async function postUpdate(productId, action) {
+const CSRF = window.csrftoken || (document.cookie.match(/csrftoken=([^;]+)/)?.[1] ?? '');
+
+async function postUpdate(productId, action, opts = {}) {
     const resp = await fetch('/update_item/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRFToken': window.csrftoken,
+            'X-CSRFToken': CSRF,
         },
         body: JSON.stringify({ productId, action })
     });
 
-    if (resp.ok) {
+    if (!resp.ok) {
+        console.error('Update failed', await resp.text());
+        return;
+    }
+
+    if (opts.reload === false) {
+        return;
+    }
+
+    const hasTotals = document.getElementById('total-amount');
+    if (!hasTotals) {
         location.reload();
     } else {
-        console.error('Update failed', await resp.text());
+        recalcTotals();
     }
 }
-
-function clamp(val, min, max) { return Math.max(min, Math.min(max, val)); }
 
 function formatMoney(num) {
     const n = Number(num);
@@ -24,16 +34,19 @@ function formatMoney(num) {
 
 function recalcForProduct(pid) {
     const qtyInput = document.querySelector(`.qty-input[data-product="${pid}"]`);
-    const priceEl = qtyInput?.closest('.sm\\:col-span-3')?.querySelector('.unit-price');
-    const subtotalEl = document.querySelector(`.item-subtotal[data-product="${pid}"]`);
+    if (!qtyInput) return;
 
-    if (!qtyInput || !priceEl || !subtotalEl) return;
+    const row = qtyInput.closest('[data-cart-row]');
+    if (!row) return;
+
+    const priceEl = row.querySelector('.unit-price');
+    const subtotalEl = row.querySelector(`.item-subtotal[data-product="${pid}"]`);
+    if (!priceEl || !subtotalEl) return;
 
     const qty = parseInt(qtyInput.value || qtyInput.min || '1', 10);
     const price = parseFloat(priceEl.dataset.price || priceEl.textContent || '0');
 
-    const subtotal = qty * price;
-    subtotalEl.textContent = formatMoney(subtotal);
+    subtotalEl.textContent = formatMoney(qty * price);
 }
 
 function recalcTotals() {
@@ -41,12 +54,13 @@ function recalcTotals() {
     let count = 0;
 
     document.querySelectorAll('.qty-input').forEach(input => {
+        const row = input.closest('[data-cart-row]');
+        const priceEl = row ? row.querySelector('.unit-price') : null;
         const qty = parseInt(input.value || input.min || '1', 10);
-        const priceEl = input.closest('.sm\\:col-span-3')?.querySelector('.unit-price');
         const price = parseFloat(priceEl?.dataset.price || priceEl?.textContent || '0');
 
-        count += isFinite(qty) ? qty : 0;
-        total += (isFinite(qty) && isFinite(price)) ? qty * price : 0;
+        if (isFinite(qty)) count += qty;
+        if (isFinite(qty) && isFinite(price)) total += qty * price;
     });
 
     const totalAmountEl = document.getElementById('total-amount');
@@ -56,9 +70,25 @@ function recalcTotals() {
     if (totalItemsEl) totalItemsEl.textContent = count;
 }
 
+
+function applyQtyToInput(input, nextVal) {
+    const min = parseInt(input.min) || 1;
+    const max = parseInt(input.max) || 999999;
+    let v = parseInt(nextVal, 10);
+
+    if (isNaN(v)) v = min;
+    if (v < min) v = min;
+    if (v > max) v = max;
+
+    input.value = v;
+
+    const pid = input.dataset.product;
+    recalcForProduct(pid);
+    recalcTotals();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    const updateBtns = document.querySelectorAll('.update-cart');
-    updateBtns.forEach(btn => {
+    document.querySelectorAll('.update-cart').forEach(btn => {
         btn.addEventListener('click', () => {
             const productId = btn.dataset.product;
             const action = btn.dataset.action || 'add';
@@ -69,44 +99,61 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.remove-item').forEach(btn => {
         btn.addEventListener('click', async () => {
             const pid = btn.dataset.product;
-            await postUpdate(pid, 'clear');
+            const row = btn.closest('[data-cart-row]');
+
+            await postUpdate(pid, 'clear', { reload: false });
+            if (row) {
+                row.remove();
+            }
+            recalcTotals();
         });
     });
 
     document.querySelectorAll('.qty-input').forEach(input => {
         input.addEventListener('input', () => {
-            const min = parseInt(input.min) || 1;
-            const max = parseInt(input.max) || 999999;
-            let v = parseInt(input.value, 10);
-            if (isNaN(v)) v = min;
-            if (v < min) v = min;
-            if (v > max) v = max;
-            input.value = v;
-
-            const pid = input.dataset.product;
-            recalcForProduct(pid);
-            recalcTotals();
+            applyQtyToInput(input, input.value);
         });
     });
 
     document.querySelectorAll('.qty-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             const pid = btn.dataset.product;
-            const delta = parseInt(btn.dataset.delta, 10);
             const input = document.querySelector(`.qty-input[data-product="${pid}"]`);
             if (!input) return;
-
-            const min = parseInt(input.min) || 1;
-            const max = parseInt(input.max) || 999999;
-            let v = parseInt(input.value || min, 10);
-            v = isNaN(v) ? min : v;
-            v = Math.max(min, Math.min(max, v + delta));
-            input.value = v;
-
-            recalcForProduct(pid);
-            recalcTotals();
+            const delta = parseInt(btn.dataset.delta, 10) || 0;
+            const current = parseInt(input.value, 10) || parseInt(input.min) || 1;
+            applyQtyToInput(input, current + delta);
         });
     });
+
+    const checkoutLink = document.getElementById('checkout-go');
+    if (checkoutLink) {
+        checkoutLink.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const inputs = document.querySelectorAll('.qty-input');
+            const reqs = [];
+            inputs.forEach(input => {
+                const pid = input.dataset.product;
+                const qty = parseInt(input.value || input.min || '1', 10);
+                reqs.push(
+                    fetch(`/set_qty/${pid}/`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': CSRF,
+                            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+                        },
+                        body: new URLSearchParams({ quantity: qty })
+                    })
+                );
+            });
+            try {
+                await Promise.all(reqs);
+            } catch (err) {
+                console.error('sync before checkout failed', err);
+            }
+            window.location.href = checkoutLink.getAttribute('href');
+        });
+    }
 
     recalcTotals();
 });

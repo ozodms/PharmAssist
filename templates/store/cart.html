@@ -5,7 +5,6 @@
 
 {% block content %}
 
-<!-- PROGRESS BAR -->
 <div class="flex flex-col lg:flex-row items-start lg:items-end gap-6 mb-12">
     <div class="w-full">
         <div class="flex items-center w-full">
@@ -43,18 +42,14 @@
     </div>
 </div>
 
-<!-- MAIN CONTENT -->
+<!-- main -->
 <div class="mx-auto max-w-screen-2xl px-6 py-12">
     <div class="grid lg:grid-cols-3 gap-8">
-
-        <!-- CART ITEMS -->
         <section class="lg:col-span-2 bg-white p-6 rounded-xl shadow-sm ring-1 ring-black/5">
             <h3 class="text-xl font-semibold text-slate-900 mb-6">Your Cart</h3>
             <hr class="border-gray-200 mb-8" />
-
             {% for item in items %}
-            <div class="grid sm:grid-cols-5 gap-6 items-start mb-10">
-                <!-- PRODUCT IMAGE -->
+            <div class="grid sm:grid-cols-5 gap-6 items-start mb-10" data-cart-row>
                 <div class="sm:col-span-2 flex items-center justify-center">
                     <div
                         class="group w-40 h-40 md:w-48 md:h-48 rounded-lg bg-white border-2 border-dashed border-[#07beb8]/40 flex items-center justify-center transition-colors duration-300 hover:border-[#07beb8] hover:bg-[#07beb8]/5">
@@ -62,8 +57,6 @@
                             class="max-w-full max-h-full object-contain transition-transform duration-300 ease-out group-hover:-translate-y-2" />
                     </div>
                 </div>
-
-                <!-- PRODUCT DETAILS -->
                 <div class="sm:col-span-3 flex flex-col justify-between h-full">
                     <div>
                         <div class="flex justify-between items-start mb-1">
@@ -79,7 +72,6 @@
                         <p class="text-xs text-gray-400">Available: {{ item.product.availability }}</p>
                     </div>
 
-                    <!-- Quantity + Subtotal -->
                     <div class="mt-4 flex justify-between items-center">
                         <div class="inline-flex items-center rounded-lg border border-gray-300">
                             <button type="button" class="qty-btn px-3 py-1.5 text-slate-700 hover:bg-slate-50"
@@ -109,7 +101,6 @@
             {% endfor %}
         </section>
 
-        <!-- ORDER SUMMARY -->
         <aside class="bg-white rounded-xl p-6 h-max shadow-sm ring-1 ring-black/5 md:sticky top-6">
             <h3 class="text-xl font-semibold text-slate-900 mb-6">Order Summary</h3>
             <hr class="border-gray-200 mb-8" />

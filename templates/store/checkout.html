@@ -48,7 +48,7 @@
             <div class="lg:col-span-2">
                 <form>
                     <h2 class="text-xl text-slate-900 font-semibold mb-6">Company Details</h2>
-                    <!-- Company identifiers -->
+
                     <div class="grid lg:grid-cols-2 gap-y-6 gap-x-4">
                         <div class="lg:col-span-2">
                             <label class="text-sm text-slate-900 font-medium block mb-2">Legal company name</label>
@@ -89,7 +89,7 @@
                                 class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
                         </div>
                     </div>
-                    <!-- Contact person -->
+
                     <h3 class="text-base text-slate-900 font-semibold mt-10 mb-4">Contact person</h3>
                     <div class="grid lg:grid-cols-2 gap-y-6 gap-x-4">
                         <div>
@@ -113,7 +113,7 @@
                                 class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
                         </div>
                     </div>
-                    <!-- Payment details -->
+
                     <h3 class="text-base text-slate-900 font-semibold mt-10 mb-4">Payment details</h3>
                     <div class="grid lg:grid-cols-2 gap-y-6 gap-x-4">
                         <div>
@@ -134,12 +134,9 @@
                     </div>
                 </form>
             </div>
-            <!-- Order summary -->
-            <!-- RIGHT: ORDER SUMMARY -->
+
             <div class="relative">
                 <h2 class="text-xl text-slate-900 font-semibold mb-6">Order Summary</h2>
-
-                <!-- items -->
                 <div class="space-y-4 mb-6">
                     {% for item in items %}
                     <div class="flex items-start gap-4">
@@ -151,7 +148,7 @@
                         <div class="flex-1">
                             <div class="flex justify-between gap-4">
                                 <p class="text-sm font-semibold text-slate-900">{{ item.product.name }}</p>
-                                <p class="text-sm font-semibold text-slate-900">€{{ item.get_total|floatformat:2 }}</p>
+                                <p class="text-sm font-semibold text-slate-900">{{ item.get_total|floatformat:2 }}</p>
                             </div>
                             <p class="text-xs text-slate-600 mt-0.5">
                                 €{{ item.product.price|floatformat:2 }} × {{ item.quantity }}
@@ -162,11 +159,11 @@
                 </div>
 
                 <ul class="text-slate-600 font-medium space-y-3">
-                    <li class="flex flex-wrap gap-4 text-sm">
-                        Subtotal
-                        <span class="ml-auto font-semibold text-slate-900">€{{ order.get_cart_total|floatformat:2 }}</span>
-                    </li>
                     <hr class="border-slate-300" />
+                    <li class="flex flex-wrap gap-4 text-[15px] font-semibold text-slate-900">
+                        Total items
+                        <span class="ml-auto">{{ total_items }}</span>
+                    </li>
                     <li class="flex flex-wrap gap-4 text-[15px] font-semibold text-slate-900">
                         Total
                         <span class="ml-auto">€{{ order.get_cart_total|floatformat:2 }}</span>
