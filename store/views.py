@@ -89,12 +89,16 @@ def updateItem(request):
             OrderItem.objects.filter(order=order, product=product).delete()
             return JsonResponse({'ok': True})
 
-        order_item, _ = OrderItem.objects.get_or_create(order=order, product=product)
+        order_item, created = OrderItem.objects.get_or_create(order=order, product=product)
 
         if action == 'add':
-            if order_item.quantity < product.availability:
-                order_item.quantity += 1
-                order_item.save()
+            if created:
+                order_item.quantity = 1
+            else:
+                if order_item.quantity < product.availability:
+                    order_item.quantity += 1
+            order_item.save()
+
         elif action == 'remove':
             order_item.quantity -= 1
             if order_item.quantity <= 0:

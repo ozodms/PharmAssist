@@ -1,5 +1,3 @@
-const updateBtns = document.querySelectorAll('.update-cart');
-
 async function postUpdate(productId, action) {
     const resp = await fetch('/update_item/', {
         method: 'POST',
@@ -17,62 +15,7 @@ async function postUpdate(productId, action) {
     }
 }
 
-
-document.querySelectorAll('.remove-item').forEach(btn => {
-    btn.addEventListener('click', async () => {
-        const pid = btn.dataset.product;
-        try {
-            const resp = await fetch('/update_item/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': window.csrftoken,
-                },
-                body: JSON.stringify({ productId: pid, action: 'clear' })
-            });
-            if (resp.ok) {
-                location.reload();
-            } else {
-                console.error('Remove failed', await resp.text());
-            }
-        } catch (e) {
-            console.error('Remove error', e);
-        }
-    });
-});
-
-
-for (const btn of updateBtns) {
-    btn.addEventListener('click', () => {
-        const productId = btn.dataset.product;
-        const action = btn.dataset.action;
-
-        if (window.USER === 'AnonymousUser') {
-            postUpdate(productId, action);
-        } else {
-            postUpdate(productId, action);
-        }
-    });
-}
-
-
-
-function getToken(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
 function clamp(val, min, max) { return Math.max(min, Math.min(max, val)); }
-
 
 function formatMoney(num) {
     const n = Number(num);
@@ -114,6 +57,22 @@ function recalcTotals() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    const updateBtns = document.querySelectorAll('.update-cart');
+    updateBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const productId = btn.dataset.product;
+            const action = btn.dataset.action || 'add';
+            postUpdate(productId, action);
+        });
+    });
+
+    document.querySelectorAll('.remove-item').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const pid = btn.dataset.product;
+            await postUpdate(pid, 'clear');
+        });
+    });
+
     document.querySelectorAll('.qty-input').forEach(input => {
         input.addEventListener('input', () => {
             const min = parseInt(input.min) || 1;
@@ -150,27 +109,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     recalcTotals();
-});
-
-document.querySelectorAll('.remove-item').forEach(btn => {
-    btn.addEventListener('click', async () => {
-        const pid = btn.dataset.product;
-        try {
-            const resp = await fetch('/update_item/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': window.csrftoken,
-                },
-                body: JSON.stringify({ productId: pid, action: 'clear' })
-            });
-            if (resp.ok) {
-                location.reload();
-            } else {
-                console.error('Remove failed', await resp.text());
-            }
-        } catch (e) {
-            console.error('Remove error', e);
-        }
-    });
 });
