@@ -15,6 +15,9 @@ class Customer(models.Model):
     contact_position = models.CharField("Contact person's position", max_length=128, blank=True)
     contact_email = models.EmailField("Contact persons's email", max_length=200, blank=True)
     contact_phone = models.CharField("Contact person's phone number", max_length=64, blank=True)
+    bank_name = models.CharField("Bank name", max_length=200, blank=True)
+    bank_account = models.CharField("Bank account / IBAN", max_length=64, blank=True)
+    bank_swift = models.CharField("BIC / SWIFT", max_length=64, blank=True)
 
 class Product(models.Model):
     name = models.CharField(max_length=200)
