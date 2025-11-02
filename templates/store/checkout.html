@@ -43,16 +43,48 @@
             </div>
         </div>
 
-        <!-- main -->
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-y-12 gap-x-8 lg:gap-x-12">
             <div class="lg:col-span-2">
-                <form id="checkout-form">
-                    <h2 class="text-xl text-slate-900 font-semibold mb-6">Company Details</h2>
+                {% if request.user.is_authenticated %}
+                <div class="rounded-lg border border-slate-200 bg-slate-50 px-5 py-4 mb-6 space-y-3">
+                    <p class="text-sm text-slate-700">
+                        You are checking out as
+                        <strong>{{ request.user.customer.tax_id|default:request.user.username }}</strong>.
+                        Company data is already in the system.
+                    </p>
+                    {% if request.user.customer.delivery_address %}
+                    <div class="text-sm">
+                        <p class="text-slate-500 mb-1">Delivery address:</p>
+                        <p class="text-slate-900 font-medium leading-snug">
+                            {{ request.user.customer.delivery_address }}
+                        </p>
+                        <p class="text-xs text-slate-400 mt-2">
+                            Want to change it? Go to
+                            <a href="{% url 'profile' %}" class="text-[#07beb8] underline">Profile</a>.
+                        </p>
+                    </div>
+                    {% else %}
+                    <div class="text-sm">
+                        <p class="text-slate-500">
+                            Delivery address is not set for your company yet.
+                        </p>
+                        <p class="text-xs text-slate-400 mt-2">
+                            Please add it in
+                            <a href="{% url 'profile' %}" class="text-[#07beb8] underline">Profile</a>
+                            so we know where to ship.
+                        </p>
+                    </div>
+                    {% endif %}
+                </div>
+                {% else %}
+                <form id="checkout-form" method="post" action="{% url 'checkout' %}">
+                    {% csrf_token %}
+                    <h2 class="text-xl text-slate-900 font-semibold mb-6">Company details</h2>
 
                     <div class="grid lg:grid-cols-2 gap-y-6 gap-x-4">
                         <div class="lg:col-span-2">
                             <label class="text-sm text-slate-900 font-medium block mb-2" for="legal_name">
-                                Legal company name
+                                Legal company name *
                             </label>
                             <input id="legal_name" name="legal_name" type="text" required
                                 placeholder='e.g., "Example Clinic LLC", "SIA Example Clinic"'
@@ -60,48 +92,44 @@
                         </div>
 
                         <div>
-                            <label class="text-sm text-slate-900 font-medium block mb-2" for="reg_number">
-                                Company registration number
+                            <label class="text-sm text-slate-900 font-medium block mb-2" for="company_reg_number">
+                                Company registration number *
                             </label>
-                            <input id="reg_number" name="reg_number" type="text" required
+                            <input id="company_reg_number" name="company_reg_number" type="text" required
                                 placeholder="Registration number"
                                 class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
                         </div>
 
                         <div>
                             <label class="text-sm text-slate-900 font-medium block mb-2" for="tax_id">
-                                Tax ID (VAT)
+                                Tax ID *
                             </label>
-                            <input id="tax_id" name="tax_id" type="text" required
-                                placeholder="e.g., LV12345678901 / VAT / Tax ID"
+                            <input id="tax_id" name="tax_id" type="text" required placeholder="This will be your login"
                                 class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
                         </div>
 
                         <div class="lg:col-span-2">
                             <label class="text-sm text-slate-900 font-medium block mb-2" for="registered_address">
-                                Registered address
+                                Registered address *
                             </label>
                             <input id="registered_address" name="registered_address" type="text" required
                                 placeholder="Street, building, suite, city, ZIP/postcode, country"
                                 class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
                         </div>
 
-                        <!-- these two can be optional -->
                         <div class="lg:col-span-2">
                             <label class="text-sm text-slate-900 font-medium block mb-2" for="billing_address">
-                                Billing address <span class="text-slate-400">(if different)</span>
+                                Billing address (if different)
                             </label>
                             <input id="billing_address" name="billing_address" type="text"
-                                placeholder="Street, building, suite, city, ZIP/postcode, country"
                                 class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
                         </div>
 
                         <div class="lg:col-span-2">
                             <label class="text-sm text-slate-900 font-medium block mb-2" for="delivery_address">
-                                Delivery address <span class="text-slate-400">(if different)</span>
+                                Delivery address
                             </label>
                             <input id="delivery_address" name="delivery_address" type="text"
-                                placeholder="Warehouse / pharmacy / clinic — address, entrance, note"
                                 class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
                         </div>
                     </div>
@@ -110,7 +138,7 @@
                     <div class="grid lg:grid-cols-2 gap-y-6 gap-x-4">
                         <div>
                             <label class="text-sm text-slate-900 font-medium block mb-2" for="contact_name">
-                                Full name
+                                Full name *
                             </label>
                             <input id="contact_name" name="contact_name" type="text" required
                                 placeholder="First and last name"
@@ -118,7 +146,7 @@
                         </div>
                         <div>
                             <label class="text-sm text-slate-900 font-medium block mb-2" for="contact_position">
-                                Position / title
+                                Position / title *
                             </label>
                             <input id="contact_position" name="contact_position" type="text" required
                                 placeholder="Procurement / Head physician / Pharmacy manager"
@@ -126,7 +154,7 @@
                         </div>
                         <div>
                             <label class="text-sm text-slate-900 font-medium block mb-2" for="contact_email">
-                                Work email
+                                Work email *
                             </label>
                             <input id="contact_email" name="contact_email" type="email" required
                                 placeholder="clinic.procurement@example.com"
@@ -134,7 +162,7 @@
                         </div>
                         <div>
                             <label class="text-sm text-slate-900 font-medium block mb-2" for="contact_phone">
-                                Work phone
+                                Work phone *
                             </label>
                             <input id="contact_phone" name="contact_phone" type="tel" required
                                 placeholder="+371 0000 0000"
@@ -142,32 +170,53 @@
                         </div>
                     </div>
 
-                    <h3 class="text-base text-slate-900 font-semibold mt-10 mb-4">Payment details</h3>
+                    <h3 class="text-base text-slate-900 font-semibold mt-10 mb-4">Bank details</h3>
                     <div class="grid lg:grid-cols-2 gap-y-6 gap-x-4">
-                        <div>
-                            <label class="text-sm text-slate-900 font-medium block mb-2" for="iban">
-                                IBAN
-                            </label>
-                            <input id="iban" name="iban" type="text" required placeholder="LV00BANK0000000000000"
-                                class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
-                        </div>
-                        <div>
-                            <label class="text-sm text-slate-900 font-medium block mb-2" for="swift">
-                                BIC / SWIFT
-                            </label>
-                            <input id="swift" name="swift" type="text" required placeholder="BANKLV2X / ABCDGB2L"
-                                class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
-                        </div>
                         <div class="lg:col-span-2">
                             <label class="text-sm text-slate-900 font-medium block mb-2" for="bank_name">
-                                Bank name
+                                Bank name *
                             </label>
                             <input id="bank_name" name="bank_name" type="text" required
                                 placeholder="Bank and branch name"
                                 class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
                         </div>
+                        <div>
+                            <label class="text-sm text-slate-900 font-medium block mb-2" for="bank_account">
+                                Bank account / IBAN *
+                            </label>
+                            <input id="bank_account" name="bank_account" type="text" required
+                                placeholder="LV00BANK0000000000000"
+                                class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
+                        </div>
+                        <div>
+                            <label class="text-sm text-slate-900 font-medium block mb-2" for="bank_swift">
+                                BIC / SWIFT *
+                            </label>
+                            <input id="bank_swift" name="bank_swift" type="text" required
+                                placeholder="BANKLV2X / ABCDGB2L"
+                                class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
+                        </div>
+                    </div>
+
+                    <h3 class="text-base text-slate-900 font-semibold mt-10 mb-4">Create password</h3>
+                    <div class="grid lg:grid-cols-2 gap-y-6 gap-x-4 mb-4">
+                        <div>
+                            <label class="text-sm text-slate-900 font-medium block mb-2" for="password1">
+                                Password *
+                            </label>
+                            <input id="password1" name="password1" type="password" required
+                                class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
+                        </div>
+                        <div>
+                            <label class="text-sm text-slate-900 font-medium block mb-2" for="password2">
+                                Confirm password *
+                            </label>
+                            <input id="password2" name="password2" type="password" required
+                                class="px-4 py-2.5 bg-white border border-gray-400 w-full text-sm rounded-md focus:outline-[#07beb8]" />
+                        </div>
                     </div>
                 </form>
+                {% endif %}
             </div>
 
             <div class="relative lg:h-full flex flex-col">
@@ -183,7 +232,13 @@
                         <div class="flex-1">
                             <div class="flex justify-between gap-4">
                                 <p class="text-sm font-semibold text-slate-900">{{ item.product.name }}</p>
-                                <p class="text-sm font-semibold text-slate-900">{{ item.get_total|floatformat:2 }}</p>
+                                <p class="text-sm font-semibold text-slate-900">
+                                    {% if item.get_total %}
+                                    {{ item.get_total|floatformat:2 }}
+                                    {% else %}
+                                    {{ item.subtotal|floatformat:2 }}
+                                    {% endif %}
+                                </p>
                             </div>
                             <p class="text-xs text-slate-600 mt-0.5">
                                 €{{ item.product.price|floatformat:2 }} × {{ item.quantity }}
@@ -206,11 +261,20 @@
                 </ul>
 
                 <div class="space-y-4 mt-auto pt-8">
+                    {% if request.user.is_authenticated %}
+                    <a href="{% url 'order' %}"
+                        class="rounded-lg px-4 py-2.5 w-full text-sm font-medium tracking-wide
+                                  border border-[#07beb8] text-[#07beb8] hover:bg-[#07beb8] hover:text-white transition block text-center">
+                        Confirm order
+                    </a>
+                    {% else %}
                     <button id="confirm-order-btn" disabled class="rounded-lg px-4 py-2.5 w-full text-sm font-medium tracking-wide
-                                   border border-[#07beb8] text-slate-400 bg-slate-100 cursor-not-allowed
-                                   transition">
+                                       border border-[#07beb8] text-slate-400 bg-slate-100 cursor-not-allowed
+                                       transition block text-center">
                         Confirm order
                     </button>
+                    {% endif %}
+
                     <a href="{% url 'cart' %}"
                         class="rounded-lg px-4 py-2.5 w-full text-sm font-medium tracking-wide
                               border border-[#07beb8] text-[#07beb8] hover:bg-[#07beb8] hover:text-white transition block text-center">
@@ -222,16 +286,30 @@
     </div>
 </div>
 
-<!-- simple validation -->
+{% if not request.user.is_authenticated %}
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const form = document.getElementById('checkout-form');
         const btn = document.getElementById('confirm-order-btn');
-
         if (!form || !btn) return;
 
+        function passwordStrong(pwd) {
+            if (pwd.length < 8) return false;
+            if (!/[A-Za-z]/.test(pwd)) return false;
+            if (!/[0-9]/.test(pwd)) return false;
+            return true;
+        }
+
         function checkForm() {
-            const valid = form.checkValidity();
+            let valid = form.checkValidity();
+
+            const p1 = form.password1.value.trim();
+            const p2 = form.password2.value.trim();
+
+            if (!passwordStrong(p1) || p1 !== p2) {
+                valid = false;
+            }
+
             if (valid) {
                 btn.disabled = false;
                 btn.classList.remove('cursor-not-allowed', 'bg-slate-100', 'text-slate-400');
@@ -246,11 +324,11 @@
         form.addEventListener('input', checkForm);
         checkForm();
 
-
         btn.addEventListener('click', (e) => {
             if (btn.disabled) return;
-            window.location.href = "{% url 'order' %}";
+            form.submit();
         });
     });
 </script>
+{% endif %}
 {% endblock content %}

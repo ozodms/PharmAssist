@@ -29,33 +29,43 @@
                     <img src="{% static 'store/img/logo.png' %}" alt="Logo"
                         class="h-16 w-16 rounded-full transition-all duration-500 hover:scale-125 hover:shadow-2xl cursor-pointer">
                 </div>
-
                 <div class="flex items-center space-x-4">
                     <a href="{% url 'cart' %}"
                         class="transition-all duration-300 hover:scale-105 hover:shadow-lg hover:bg-[#68d8d6] rounded-lg p-1">
                         <img src="{% static 'store/img/cart-black.png' %}" alt="Cart" class="h-10 w-10 cursor-pointer">
                     </a>
-                    <a href="#" class="text-black text-lg px-6 py-2 rounded-lg transition-all duration-300
-                        hover:bg-[#68d8d6] hover:border-[#68d8d6] hover:border-2 hover:shadow-lg hover:scale-105
-                        border-2 border-transparent">
+
+                    {% if request.user.is_authenticated %}
+                    <a href="{% url 'profile' %}" class="text-black text-lg px-4 py-2 rounded-lg bg-white/30 hover:bg-white/60 transition-all duration-300
+                                  hover:shadow-lg">
+                        {{ request.user.username }}
+                    </a>
+                    <a href="{% url 'logout' %}" class="text-black text-sm px-3 py-2 rounded-lg transition-all duration-300
+                                  hover:bg-[#68d8d6]">
+                        Logout
+                    </a>
+                    {% else %}
+                    <a href="{% url 'login' %}" class="text-black text-lg px-4 py-2 rounded-lg transition-all duration-300
+                                  hover:bg-[#68d8d6] hover:border-[#68d8d6] hover:border-2 hover:shadow-lg hover:scale-105
+                                  border-2 border-transparent">
                         Log in
                     </a>
+                    <a href="{% url 'register' %}" class="text-black text-lg px-4 py-2 rounded-lg bg-white/20 transition-all duration-300
+                                  hover:bg-white/60 hover:shadow-lg">
+                        Register
+                    </a>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </header>
 
-
     <div class="container mx-auto px-6">
         <br>
-        {% block content %}
-
-        {% endblock content %}
+        {% block content %}{% endblock content %}
     </div>
 
     <script>
-
-        window.USER = "{{ request.user|default:'AnonymousUser' }}";
 
         function getCookie(name) {
             let cookieValue = null;
