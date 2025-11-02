@@ -1,0 +1,186 @@
+{% extends 'store/main.html' %}
+
+{% block title %}Register — PharmAssist{% endblock %}
+
+{% block content %}
+<div class="min-h-[70vh] flex items-center justify-center py-12">
+    <div class="w-full max-w-3xl bg-white rounded-xl shadow-sm ring-1 ring-black/5 p-8">
+        <h1 class="text-2xl font-semibold text-slate-900 mb-2">Register company</h1>
+        <p class="text-sm text-slate-500 mb-6">
+            One-time company onboarding. Next time you log in with <strong>Tax ID + password</strong>.
+        </p>
+
+        {% if error %}
+        <div class="mb-4 rounded-lg bg-red-50 border border-red-200 px-4 py-2 text-sm text-red-700">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <form method="post" id="register-form" class="grid md:grid-cols-2 gap-5">
+            {% csrf_token %}
+
+            <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-slate-900 mb-2" for="legal_name">
+                    Legal company name *
+                </label>
+                <input id="legal_name" name="legal_name" type="text" required
+                    placeholder='e.g. "SIA Example Clinic", "Example Hospital LLC"'
+                    class="w-full px-4 py-2.5 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#07beb8]" />
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-slate-900 mb-2" for="company_reg_number">
+                    Company registration number *
+                </label>
+                <input id="company_reg_number" name="company_reg_number" type="text" required
+                    placeholder="Registration number"
+                    class="w-full px-4 py-2.5 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#07beb8]" />
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-slate-900 mb-2" for="tax_id">
+                    Tax ID (ИНН) * <span class="text-xs text-slate-400">(will be your login)</span>
+                </label>
+                <input id="tax_id" name="tax_id" type="text" required
+                    class="w-full px-4 py-2.5 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#07beb8]" />
+            </div>
+
+            <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-slate-900 mb-2" for="registered_address">
+                    Registered address *
+                </label>
+                <input id="registered_address" name="registered_address" type="text" required
+                    placeholder="Street, building, suite, city, ZIP/postcode, country"
+                    class="w-full px-4 py-2.5 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#07beb8]" />
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-slate-900 mb-2" for="email">
+                    Work email *
+                </label>
+                <input id="email" name="email" type="email" required placeholder="clinic.procurement@example.com"
+                    class="w-full px-4 py-2.5 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#07beb8]" />
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-slate-900 mb-2" for="contact_phone">
+                    Work phone / mobile *
+                </label>
+                <input id="contact_phone" name="contact_phone" type="tel" required placeholder="+371 0000 0000"
+                    class="w-full px-4 py-2.5 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#07beb8]" />
+            </div>
+
+            <div class="md:col-span-2 pt-2">
+                <h2 class="text-sm font-semibold text-slate-900 mb-1">Bank details</h2>
+                <p class="text-xs text-slate-400 mb-3">We need this to issue invoices and payouts.</p>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-slate-900 mb-2" for="bank_name">
+                    Bank name *
+                </label>
+                <input id="bank_name" name="bank_name" type="text" required placeholder="Luminor, Swedbank, SEB..."
+                    class="w-full px-4 py-2.5 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#07beb8]" />
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-slate-900 mb-2" for="bank_account">
+                    Bank account / IBAN *
+                </label>
+                <input id="bank_account" name="bank_account" type="text" required placeholder="LV00BANK0000000000000"
+                    class="w-full px-4 py-2.5 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#07beb8]" />
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-slate-900 mb-2" for="bank_swift">
+                    BIC / SWIFT *
+                </label>
+                <input id="bank_swift" name="bank_swift" type="text" required placeholder="BANKLV2X"
+                    class="w-full px-4 py-2.5 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#07beb8]" />
+            </div>
+
+            <div class="md:col-span-2 pt-4 border-t border-slate-100 mt-2">
+                <h2 class="text-sm font-semibold text-slate-900 mb-1">Security</h2>
+                <p class="text-xs text-slate-400 mb-3">
+                    Password must be at least 8 characters, contain a number and a letter.
+                </p>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-slate-900 mb-2" for="password1">
+                    Password *
+                </label>
+                <input id="password1" name="password1" type="password" required minlength="8"
+                    class="w-full px-4 py-2.5 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#07beb8]" />
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-slate-900 mb-2" for="password2">
+                    Confirm password *
+                </label>
+                <input id="password2" name="password2" type="password" required minlength="8"
+                    class="w-full px-4 py-2.5 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#07beb8]" />
+            </div>
+
+            <div class="md:col-span-2">
+                <button type="submit" id="register-submit"
+                    class="w-full bg-[#07beb8]/60 text-white font-medium py-2.5 rounded-md transition disabled:opacity-60 disabled:cursor-not-allowed"
+                    disabled>
+                    Create account
+                </button>
+            </div>
+        </form>
+
+        <p class="text-sm text-slate-500 mt-6 text-center">
+            Already registered?
+            <a href="{% url 'login' %}" class="text-[#07beb8] font-medium hover:underline">
+                Log in
+            </a>
+        </p>
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById('register-form');
+    const submitBtn = document.getElementById('register-submit');
+
+    function passwordStrong(pwd) {
+        if (pwd.length < 8) return false;
+        if (!/[A-Za-z]/.test(pwd)) return false;
+        if (!/[0-9]/.test(pwd)) return false;
+        return true;
+    }
+
+    function checkFilled() {
+        const requiredFields = form.querySelectorAll('[required]');
+        for (const f of requiredFields) {
+            if (!f.value.trim()) {
+                submitBtn.disabled = true;
+                submitBtn.classList.add('bg-[#07beb8]/60');
+                submitBtn.classList.remove('hover:bg-[#05a4a0]');
+                return;
+            }
+        }
+
+        const p1 = form.password1.value.trim();
+        const p2 = form.password2.value.trim();
+
+        if (!passwordStrong(p1)) {
+            submitBtn.disabled = true;
+            return;
+        }
+
+        if (p1 !== p2) {
+            submitBtn.disabled = true;
+            return;
+        }
+
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('bg-[#07beb8]/60');
+        submitBtn.classList.add('bg-[#07beb8]', 'hover:bg-[#05a4a0]');
+    }
+
+    form.addEventListener('input', checkFilled);
+    document.addEventListener('DOMContentLoaded', checkFilled);
+</script>
+{% endblock %}

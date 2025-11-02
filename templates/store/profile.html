@@ -1,0 +1,167 @@
+{% extends 'store/main.html' %}
+{% load static %}
+
+{% block title %}Profile — PharmAssist{% endblock %}
+
+{% block content %}
+
+<div class="bg-white sm:px-8 px-4 py-8 rounded-xl shadow-sm ring-1 ring-black/5 max-w-screen-xl mx-auto my-8">
+    <div class="flex items-center justify-between mb-8 gap-4">
+        <div>
+            <h1 class="text-2xl font-semibold text-slate-900">Company profile</h1>
+            <p class="text-sm text-slate-500 mt-1">
+                Keep your billing, delivery and contact details up to date. We use this data for invoicing and delivery.
+            </p>
+        </div>
+        <a href="{% url 'store' %}" class="text-sm text-[#07beb8] hover:underline">← Back to store</a>
+    </div>
+
+    {% if saved %}
+    <div class="mb-6 rounded-lg bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-900">
+        ✅ Profile updated successfully.
+    </div>
+    {% endif %}
+
+    <form method="post" class="space-y-10">
+        {% csrf_token %}
+
+        <div>
+            <h2 class="text-lg font-semibold text-slate-900 mb-4">Company details</h2>
+            <div class="grid lg:grid-cols-2 gap-y-6 gap-x-4">
+                <div class="lg:col-span-2">
+                    <label class="text-sm text-slate-900 font-medium block mb-2" for="legal_name">
+                        Legal company name
+                    </label>
+                    <input id="legal_name" name="legal_name" type="text" required value="{{ customer.legal_name }}"
+                        placeholder='e.g., "Example Clinic LLC", "SIA Example Clinic"'
+                        class="px-4 py-2.5 bg-white border border-gray-300 w-full text-sm rounded-md focus:outline-[#07beb8]" />
+                </div>
+
+                <div>
+                    <label class="text-sm text-slate-900 font-medium block mb-2" for="company_reg_number">
+                        Company registration number
+                    </label>
+                    <input id="company_reg_number" name="company_reg_number" type="text" required
+                        value="{{ customer.company_reg_number }}" placeholder="Registration number"
+                        class="px-4 py-2.5 bg-white border border-gray-300 w-full text-sm rounded-md focus:outline-[#07beb8]" />
+                </div>
+
+                <div>
+                    <label class="text-sm text-slate-900 font-medium block mb-2" for="tax_id">
+                        Tax ID (ИНН)
+                    </label>
+                    <input id="tax_id" name="tax_id" type="text" value="{{ customer.tax_id }}" readonly
+                        class="px-4 py-2.5 bg-slate-50 border border-gray-200 w-full text-sm rounded-md text-slate-500 cursor-not-allowed" />
+                    <p class="text-xs text-slate-400 mt-1">This is your login. Contact admin if you need to change it.
+                    </p>
+                </div>
+
+                <div class="lg:col-span-2">
+                    <label class="text-sm text-slate-900 font-medium block mb-2" for="registered_address">
+                        Registered address
+                    </label>
+                    <input id="registered_address" name="registered_address" type="text" required
+                        value="{{ customer.registered_address }}"
+                        placeholder="Street, building, suite, city, ZIP/postcode, country"
+                        class="px-4 py-2.5 bg-white border border-gray-300 w-full text-sm rounded-md focus:outline-[#07beb8]" />
+                </div>
+
+                <div class="lg:col-span-2">
+                    <label class="text-sm text-slate-900 font-medium block mb-2" for="billing_address">
+                        Billing address <span class="text-slate-400">(if different)</span>
+                    </label>
+                    <input id="billing_address" name="billing_address" type="text"
+                        value="{{ customer.billing_address }}"
+                        class="px-4 py-2.5 bg-white border border-gray-300 w-full text-sm rounded-md focus:outline-[#07beb8]" />
+                </div>
+
+                <div class="lg:col-span-2">
+                    <label class="text-sm text-slate-900 font-medium block mb-2" for="delivery_address">
+                        Delivery address <span class="text-slate-400">(if different)</span>
+                    </label>
+                    <input id="delivery_address" name="delivery_address" type="text"
+                        value="{{ customer.delivery_address }}"
+                        class="px-4 py-2.5 bg-white border border-gray-300 w-full text-sm rounded-md focus:outline-[#07beb8]" />
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <h2 class="text-lg font-semibold text-slate-900 mb-4">Contact person</h2>
+            <div class="grid lg:grid-cols-2 gap-y-6 gap-x-4">
+                <div>
+                    <label class="text-sm text-slate-900 font-medium block mb-2" for="contact_name">
+                        Full name
+                    </label>
+                    <input id="contact_name" name="contact_name" type="text" required
+                        value="{{ customer.contact_name }}" placeholder="First and last name"
+                        class="px-4 py-2.5 bg-white border border-gray-300 w-full text-sm rounded-md focus:outline-[#07beb8]" />
+                </div>
+                <div>
+                    <label class="text-sm text-slate-900 font-medium block mb-2" for="contact_position">
+                        Position / title
+                    </label>
+                    <input id="contact_position" name="contact_position" type="text" required
+                        value="{{ customer.contact_position }}"
+                        placeholder="Procurement / Head physician / Pharmacy manager"
+                        class="px-4 py-2.5 bg-white border border-gray-300 w-full text-sm rounded-md focus:outline-[#07beb8]" />
+                </div>
+                <div>
+                    <label class="text-sm text-slate-900 font-medium block mb-2" for="contact_email">
+                        Work email
+                    </label>
+                    <input id="contact_email" name="contact_email" type="email" required
+                        value="{{ customer.contact_email }}" placeholder="clinic.procurement@example.com"
+                        class="px-4 py-2.5 bg-white border border-gray-300 w-full text-sm rounded-md focus:outline-[#07beb8]" />
+                </div>
+                <div>
+                    <label class="text-sm text-slate-900 font-medium block mb-2" for="contact_phone">
+                        Work phone
+                    </label>
+                    <input id="contact_phone" name="contact_phone" type="tel" required
+                        value="{{ customer.contact_phone }}" placeholder="+371 0000 0000"
+                        class="px-4 py-2.5 bg-white border border-gray-300 w-full text-sm rounded-md focus:outline-[#07beb8]" />
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <h2 class="text-lg font-semibold text-slate-900 mb-4">Bank details</h2>
+            <div class="grid lg:grid-cols-2 gap-y-6 gap-x-4">
+                <div class="lg:col-span-2">
+                    <label class="text-sm text-slate-900 font-medium block mb-2" for="bank_name">
+                        Bank name
+                    </label>
+                    <input id="bank_name" name="bank_name" type="text" required value="{{ customer.bank_name }}"
+                        placeholder="Bank and branch name"
+                        class="px-4 py-2.5 bg-white border border-gray-300 w-full text-sm rounded-md focus:outline-[#07beb8]" />
+                </div>
+                <div>
+                    <label class="text-sm text-slate-900 font-medium block mb-2" for="bank_account">
+                        Bank account / IBAN
+                    </label>
+                    <input id="bank_account" name="bank_account" type="text" required
+                        value="{{ customer.bank_account }}" placeholder="LV00BANK0000000000000"
+                        class="px-4 py-2.5 bg-white border border-gray-300 w-full text-sm rounded-md focus:outline-[#07beb8]" />
+                </div>
+                <div>
+                    <label class="text-sm text-slate-900 font-medium block mb-2" for="bank_swift">
+                        BIC / SWIFT
+                    </label>
+                    <input id="bank_swift" name="bank_swift" type="text" required value="{{ customer.bank_swift }}"
+                        placeholder="BANKLV2X / ABCDGB2L"
+                        class="px-4 py-2.5 bg-white border border-gray-300 w-full text-sm rounded-md focus:outline-[#07beb8]" />
+                </div>
+            </div>
+        </div>
+
+        <div class="flex justify-end pt-2">
+            <button type="submit"
+                class="rounded-lg px-5 py-2.5 bg-[#07beb8] text-white text-sm font-medium hover:bg-[#05999a] transition">
+                Save changes
+            </button>
+        </div>
+    </form>
+</div>
+
+{% endblock content %}
