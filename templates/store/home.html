@@ -1,0 +1,860 @@
+{% extends 'store/main.html' %}
+{% load static %}
+
+{% block title %}PharmAssist{% endblock %}
+
+{% block content %}
+
+<section class="bg-[#07beb8]">
+    <style>
+        #hero-carousel::-webkit-scrollbar {
+            display: none;
+        }
+
+        #hero-carousel {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+
+    <div class="mx-auto w-screen max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8 lg:py-32">
+        <div class="grid items-center gap-10 lg:grid-cols-2">
+            <!-- LEFT: copy -->
+            <div class="max-w-prose">
+                <h1 class="text-4xl font-bold text-white sm:text-5xl">
+                    PharmAssist — streamlined <span class="text-black/80">B2B</span> medical procurement
+                </h1>
+
+                <p class="mt-4 text-base sm:text-lg/relaxed text-white/90">
+                    Order verified medicines, track invoices, and keep company data in one place. Built for clinics,
+                    pharmacies, and healthcare providers.
+                </p>
+
+                <div class="mt-6 flex gap-4">
+                    <a class="inline-block rounded border border-white bg-white/10 px-5 py-3 font-medium text-white shadow-sm transition-colors hover:bg-white/20"
+                        href="{% url 'store' %}">
+                        Browse Products
+                    </a>
+
+                    {% if not request.user.is_authenticated %}
+                    <a class="inline-block rounded border border-white/60 bg-white px-5 py-3 font-medium text-[#07beb8] shadow-sm transition-colors hover:bg-white/90"
+                        href="{% url 'register' %}">
+                        Create Company Account
+                    </a>
+                    {% else %}
+                    <a class="inline-block rounded border border-white bg-white/10 px-5 py-3 font-medium text-white shadow-sm transition-colors hover:bg-white/20"
+                        href="{% url 'profile' %}">
+                        Profile
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- RIGHT: carousel -->
+            <div class="space-y-2">
+                <div class="relative rounded-xl overflow-hidden bg-white/5 ring-1 ring-white/20">
+                    <div id="hero-carousel" class="flex w-full overflow-x-auto snap-x snap-mandatory scroll-smooth">
+                        <div class="relative w-full shrink-0 snap-center aspect-[4/3]">
+                            <img src="{% static 'store/img/homepic22.png' %}" alt="Showcase 2"
+                                class="absolute inset-0 w-full h-full object-contain bg-transparent" />
+                        </div>
+                        <div class="relative w-full shrink-0 snap-center aspect-[4/3]">
+                            <img src="{% static 'store/img/homepic33.png' %}" alt="Showcase 3"
+                                class="absolute inset-0 w-full h-full object-contain bg-transparent" />
+                        </div>
+                        <div class="relative w-full shrink-0 snap-center aspect-[4/3]">
+                            <img src="{% static 'store/img/homepic44.png' %}" alt="Showcase 4"
+                                class="absolute inset-0 w-full h-full object-contain bg-transparent" />
+                        </div>
+                        <div class="relative w-full shrink-0 snap-center aspect-[4/3]">
+                            <img src="{% static 'store/img/homepic55.png' %}" alt="Showcase 5"
+                                class="absolute inset-0 w-full h-full object-contain bg-transparent" />
+                        </div>
+                        <div class="relative w-full shrink-0 snap-center aspect-[4/3]">
+                            <img src="{% static 'store/img/homepic66.png' %}" alt="Showcase 6"
+                                class="absolute inset-0 w-full h-full object-contain bg-transparent" />
+                        </div>
+                    </div>
+
+                    <button type="button" data-dir="-1"
+                        class="absolute left-3 top-1/2 -translate-y-1/2 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/50 bg-white/70 backdrop-blur text-slate-700 hover:bg-white transition"
+                        aria-label="Previous">‹</button>
+                    <button type="button" data-dir="1"
+                        class="absolute right-3 top-1/2 -translate-y-1/2 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/50 bg-white/70 backdrop-blur text-slate-700 hover:bg-white transition"
+                        aria-label="Next">›</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Benefits / Why Choose Us -->
+<section class="py-16">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <!-- Heading -->
+        <div class="mx-auto max-w-3xl text-center">
+            <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                Why choose <span class="text-[#07beb8]">PharmAssist</span>?
+            </h2>
+            <p class="mt-3 text-base text-gray-600">
+                Clear value, zero friction, and everything you need to place confident B2B orders—fast.
+            </p>
+        </div>
+
+        <!-- Benefits grid -->
+        <div class="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <!-- Item -->
+            <div class="group rounded-2xl border border-[#07beb8]/20 bg-inherit p-6 shadow-sm transition
+                    hover:-translate-y-0.5 hover:border-[#07beb8]/40 hover:shadow-md">
+                <div class="flex items-start gap-4">
+                    <span class="inline-grid h-11 w-11 place-items-center rounded-xl bg-[#07beb8]/10">
+                        <!-- lightning bolt -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M13 3L4 14h6l-1 7 9-11h-6l1-7z" class="text-[#07beb8]" />
+                        </svg>
+                    </span>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900">Instant ordering</h3>
+                        <p class="mt-1 text-sm text-gray-600">
+                            Place orders without calls or manual confirmations—built for speed and self-service.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item -->
+            <div class="group rounded-2xl border border-[#07beb8]/20 bg-inherit p-6 shadow-sm transition
+                    hover:-translate-y-0.5 hover:border-[#07beb8]/40 hover:shadow-md">
+                <div class="flex items-start gap-4">
+                    <span class="inline-grid h-11 w-11 place-items-center rounded-xl bg-[#07beb8]/10">
+                        <!-- activity / live -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M3 12h3l3 7 4-14 3 7h5" class="text-[#07beb8]" />
+                        </svg>
+                    </span>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900">Real-time availability</h3>
+                        <p class="mt-1 text-sm text-gray-600">
+                            Live stock levels and prices—what you see is what you can order right now.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item -->
+            <div class="group rounded-2xl border border-[#07beb8]/20 bg-inherit p-6 shadow-sm transition
+                    hover:-translate-y-0.5 hover:border-[#07beb8]/40 hover:shadow-md">
+                <div class="flex items-start gap-4">
+                    <span class="inline-grid h-11 w-11 place-items-center rounded-xl bg-[#07beb8]/10">
+                        <!-- shield -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M12 3l7 4v5c0 5-3.5 9-7 9s-7-4-7-9V7l7-4z" class="text-[#07beb8]" />
+                            <path d="M9 12l2 2 4-4" class="text-[#07beb8]" />
+                        </svg>
+                    </span>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900">Secure by design</h3>
+                        <p class="mt-1 text-sm text-gray-600">
+                            Encrypted checkout, protected business profiles, and strict data handling.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item -->
+            <div class="group rounded-2xl border border-[#07beb8]/20 bg-inherit p-6 shadow-sm transition
+                    hover:-translate-y-0.5 hover:border-[#07beb8]/40 hover:shadow-md">
+                <div class="flex items-start gap-4">
+                    <span class="inline-grid h-11 w-11 place-items-center rounded-xl bg-[#07beb8]/10">
+                        <!-- arrows / fast -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M5 12l4 4M5 12l4-4" class="text-[#07beb8]" />
+                        </svg>
+                    </span>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900">Fast processing</h3>
+                        <p class="mt-1 text-sm text-gray-600">
+                            Orders move instantly through our system for quick fulfillment and delivery handling.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item -->
+            <div class="group rounded-2xl border border-[#07beb8]/20 bg-inherit p-6 shadow-sm transition
+                    hover:-translate-y-0.5 hover:border-[#07beb8]/40 hover:shadow-md">
+                <div class="flex items-start gap-4">
+                    <span class="inline-grid h-11 w-11 place-items-center rounded-xl bg-[#07beb8]/10">
+                        <!-- receipt / price -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M6 2h12v20l-3-2-3 2-3-2-3 2z" class="text-[#07beb8]" />
+                            <path d="M8 7h8M8 11h8" class="text-[#07beb8]" />
+                        </svg>
+                    </span>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900">Transparent pricing</h3>
+                        <p class="mt-1 text-sm text-gray-600">
+                            See final costs upfront—no hidden fees, no surprises at checkout.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item -->
+            <div class="group rounded-2xl border border-[#07beb8]/20 bg-inherit p-6 shadow-sm transition
+                    hover:-translate-y-0.5 hover:border-[#07beb8]/40 hover:shadow-md">
+                <div class="flex items-start gap-4">
+                    <span class="inline-grid h-11 w-11 place-items-center rounded-xl bg-[#07beb8]/10">
+                        <!-- layers / scale -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M12 2l9 5-9 5-9-5 9-5z" class="text-[#07beb8]" />
+                            <path d="M3 12l9 5 9-5" class="text-[#07beb8]" />
+                            <path d="M3 17l9 5 9-5" class="text-[#07beb8]" />
+                        </svg>
+                    </span>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900">Built for teams</h3>
+                        <p class="mt-1 text-sm text-gray-600">
+                            Company details saved securely so repeat orders take seconds, not minutes.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Optional CTA under benefits -->
+        <div class="mt-10 flex justify-center">
+            <a href="/store"
+                class="inline-flex items-center justify-center rounded-xl bg-[#07beb8] px-5 py-3 text-base font-semibold text-white shadow-sm transition hover:bg-[#059f99] focus:outline-none focus:ring-2 focus:ring-[#07beb8]/40">
+                Explore products
+            </a>
+        </div>
+    </div>
+</section>
+
+
+<!-- ============================
+     STATS (KPIs)
+     ============================ -->
+<section class="bg-[#07beb8] py-16">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-3xl text-center">
+            <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+                Numbers that matter
+            </h2>
+            <p class="mt-3 text-base text-white/80">
+                Real impact, less friction. Update these KPIs anytime as your operations scale.
+            </p>
+        </div>
+
+        <dl class="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
+            <div
+                class="rounded-2xl border border-white/20 bg-white/5 backdrop-blur p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-white/40 hover:shadow-md">
+                <dt class="text-sm font-medium text-white/80">Active SKUs</dt>
+                <dd class="mt-2 text-3xl font-bold tracking-tight text-white">2,500+</dd>
+                <p class="mt-1 text-xs text-white/70">Live, auto-updating stock</p>
+            </div>
+
+            <div
+                class="rounded-2xl border border-white/20 bg-white/5 backdrop-blur p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-white/40 hover:shadow-md">
+                <dt class="text-sm font-medium text-white/80">Median checkout time</dt>
+                <dd class="mt-2 text-3xl font-bold tracking-tight text-white">≈ 90s</dd>
+                <p class="mt-1 text-xs text-white/70">No calls, no quotes</p>
+            </div>
+
+            <div
+                class="rounded-2xl border border-white/20 bg-white/5 backdrop-blur p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-white/40 hover:shadow-md">
+                <dt class="text-sm font-medium text-white/80">On-time dispatch</dt>
+                <dd class="mt-2 text-3xl font-bold tracking-tight text-white">99%</dd>
+                <p class="mt-1 text-xs text-white/70">Last 90 days</p>
+            </div>
+
+            <div
+                class="rounded-2xl border border-white/20 bg-white/5 backdrop-blur p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-white/40 hover:shadow-md">
+                <dt class="text-sm font-medium text-white/80">Returning customers</dt>
+                <dd class="mt-2 text-3xl font-bold tracking-tight text-white">85%</dd>
+                <p class="mt-1 text-xs text-white/70">Order again within 60 days</p>
+            </div>
+        </dl>
+    </div>
+</section>
+
+
+
+<!-- How it works -->
+<section class="relative bg-white py-20">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <!-- Heading -->
+        <div class="mx-auto max-w-3xl text-center">
+            <p
+                class="inline-flex items-center gap-2 rounded-full bg-[#07beb8]/10 px-3 py-1 text-xs font-medium tracking-wide text-[#075e5b]">
+                How it works
+            </p>
+            <h2 class="mt-4 text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-gray-900">
+                Order medications in clear, simple steps
+            </h2>
+            <p class="mt-4 text-gray-600">
+                From first contact to doorstep delivery — transparent, secure, and compliant at every step.
+            </p>
+        </div>
+
+        <!-- Steps -->
+        <ol class="relative mt-14 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <!-- connector for large screens -->
+            <div aria-hidden="true"
+                class="pointer-events-none absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 bg-gray-100 md:block lg:hidden">
+            </div>
+            <div aria-hidden="true"
+                class="pointer-events-none absolute inset-y-1/2 left-0 hidden h-px w-full bg-gray-100 lg:block"></div>
+
+            <!-- Step 1 -->
+            <li
+                class="group relative rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition hover:shadow-md">
+                <div class="flex items-start gap-4">
+                    <span
+                        class="grid h-12 w-12 place-content-center rounded-xl bg-[#07beb8]/10 ring-1 ring-[#07beb8]/20">
+                        <!-- icon -->
+                        <svg viewBox="0 0 24 24" class="h-6 w-6 text-[#07beb8]" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Z" />
+                            <path d="M3 22a9 9 0 0 1 18 0" />
+                        </svg>
+                    </span>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900">Create your account</h3>
+                        <p class="mt-1 text-sm text-gray-600">Sign up, add company details, and set delivery
+                            preferences.</p>
+                    </div>
+                </div>
+                <span
+                    class="absolute right-4 top-4 rounded-full bg-gray-50 px-2.5 py-1 text-xs font-semibold text-gray-500">1</span>
+            </li>
+
+            <!-- Step 2 -->
+            <li
+                class="group relative rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition hover:shadow-md">
+                <div class="flex items-start gap-4">
+                    <span
+                        class="grid h-12 w-12 place-content-center rounded-xl bg-[#07beb8]/10 ring-1 ring-[#07beb8]/20">
+                        <svg viewBox="0 0 24 24" class="h-6 w-6 text-[#07beb8]" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path d="M21 21l-4.35-4.35" />
+                            <circle cx="10.5" cy="10.5" r="6.5" />
+                        </svg>
+                    </span>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900">Build your order</h3>
+                        <p class="mt-1 text-sm text-gray-600">Search the catalog, view availability, and add items to
+                            your cart.</p>
+                    </div>
+                </div>
+                <span
+                    class="absolute right-4 top-4 rounded-full bg-gray-50 px-2.5 py-1 text-xs font-semibold text-gray-500">2</span>
+            </li>
+
+            <!-- Step 3 — Instant checkout -->
+            <li
+                class="group relative rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition hover:shadow-md">
+                <div class="flex items-start gap-4">
+                    <span
+                        class="grid h-12 w-12 place-content-center rounded-xl bg-[#07beb8]/10 ring-1 ring-[#07beb8]/20">
+                        <!-- card icon -->
+                        <svg viewBox="0 0 24 24" class="h-6 w-6 text-[#07beb8]" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <rect x="3" y="5" width="18" height="14" rx="2" />
+                            <path d="M3 10h18M7 14h5" />
+                        </svg>
+                    </span>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900">Instant checkout</h3>
+                        <p class="mt-1 text-sm text-gray-600">
+                            Confirm shipping details and place the order in seconds. Live stock guarantees
+                            fulfillment—no back-and-forth.
+                        </p>
+                    </div>
+                </div>
+                <span
+                    class="absolute right-4 top-4 rounded-full bg-gray-50 px-2.5 py-1 text-xs font-semibold text-gray-500">3</span>
+            </li>
+
+
+            <!-- Step 4 — Immediate confirmation -->
+            <li
+                class="group relative rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition hover:shadow-md">
+                <div class="flex items-start gap-4">
+                    <span
+                        class="grid h-12 w-12 place-content-center rounded-xl bg-[#07beb8]/10 ring-1 ring-[#07beb8]/20">
+                        <!-- badge/check icon -->
+                        <svg viewBox="0 0 24 24" class="h-6 w-6 text-[#07beb8]" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path d="M12 2l2.5 2.5L17 2l2.5 2.5L22 2v8a10 10 0 1 1-10-10z" />
+                            <path d="M8.5 12.5 11 15l4.5-4.5" />
+                        </svg>
+                    </span>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900">Immediate confirmation</h3>
+                        <p class="mt-1 text-sm text-gray-600">
+                            Order ID, ETA, and delivery window show up instantly. A digital invoice lands in your email
+                            right away.
+                        </p>
+                    </div>
+                </div>
+                <span
+                    class="absolute right-4 top-4 rounded-full bg-gray-50 px-2.5 py-1 text-xs font-semibold text-gray-500">4</span>
+            </li>
+
+            <!-- Step 5 -->
+            <li
+                class="group relative rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition hover:shadow-md">
+                <div class="flex items-start gap-4">
+                    <span
+                        class="grid h-12 w-12 place-content-center rounded-xl bg-[#07beb8]/10 ring-1 ring-[#07beb8]/20">
+                        <svg viewBox="0 0 24 24" class="h-6 w-6 text-[#07beb8]" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path d="M3 7h13l5 5-5 5H3z" />
+                            <path d="M3 7v10" />
+                        </svg>
+                    </span>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900">Fast delivery & tracking</h3>
+                        <p class="mt-1 text-sm text-gray-600">Choose shipping options. Track your order in real time.
+                        </p>
+                    </div>
+                </div>
+                <span
+                    class="absolute right-4 top-4 rounded-full bg-gray-50 px-2.5 py-1 text-xs font-semibold text-gray-500">5</span>
+            </li>
+
+            <!-- Step 6 — Customer support -->
+            <li
+                class="group relative rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition hover:shadow-md">
+                <div class="flex items-start gap-4">
+                    <span
+                        class="grid h-12 w-12 place-content-center rounded-xl bg-[#07beb8]/10 ring-1 ring-[#07beb8]/20">
+                        <!-- headset icon -->
+                        <svg viewBox="0 0 24 24" class="h-6 w-6 text-[#07beb8]" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path d="M4 12a8 8 0 0 1 16 0v6a2 2 0 0 1-2 2h-3" />
+                            <path d="M4 12v6a2 2 0 0 0 2 2h3M4 13h3m10 0h3" />
+                        </svg>
+                    </span>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900">Customer support</h3>
+                        <p class="mt-1 text-sm text-gray-600">
+                            Need help with an address, invoice, or delivery note? Reach out—quick, no-friction
+                            assistance.
+                        </p>
+                    </div>
+                </div>
+                <span
+                    class="absolute right-4 top-4 rounded-full bg-gray-50 px-2.5 py-1 text-xs font-semibold text-gray-500">6</span>
+            </li>
+        </ol>
+
+        <!-- CTA -->
+        <div class="mt-12 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <a href="/store"
+                class="inline-flex items-center justify-center rounded-xl bg-[#07beb8] px-5 py-3 text-base font-semibold text-white shadow-sm transition hover:bg-[#059f99] focus:outline-none focus:ring-2 focus:ring-[#07beb8]/40">
+                Start browsing
+            </a>
+            <div class="relative inline-block">
+                <button id="salesBtn"
+                    class="inline-flex items-center justify-center rounded-xl border border-[#07beb8] px-5 py-3 text-base font-semibold text-[#07beb8] transition hover:bg-[#07beb8]/10"
+                    aria-haspopup="true" aria-expanded="false">
+                    Talk to sales
+                    <svg class="ml-2 h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd"
+                            d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.21 8.29a.75.75 0 0 1 .02-1.08z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </button>
+
+                <!-- Panel -->
+                <div id="salesMenu"
+                    class="absolute left-0 mt-2 w-64 origin-top-left rounded-xl bg-white shadow-lg ring-1 ring-black/5 hidden z-20">
+                    <div class="p-2">
+                        <!-- Call -->
+                        <a href="tel:+37120000000"
+                            class="flex items-center gap-3 rounded-lg p-3 hover:bg-gray-50 transition">
+                            <span
+                                class="grid h-10 w-10 place-content-center rounded-lg bg-[#07beb8]/10 ring-1 ring-[#07beb8]/20">
+                                <svg class="h-5 w-5 text-[#07beb8]" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="1.5">
+                                    <path
+                                        d="M2.5 5.5c0 8.008 6.492 14 14.5 14 .994 0 1.938-.125 2.84-.37a2 2 0 0 0 1.41-1.94v-2.08a1 1 0 0 0-.7-.96l-4-1.33a1 1 0 0 0-1.06.3l-1.2 1.43a1 1 0 0 1-1.21.27 10.7 10.7 0 0 1-5.16-5.16 1 1 0 0 1 .27-1.21l1.43-1.2a1 1 0 0 0 .3-1.06l-1.33-4a1 1 0 0 0-.96-.7H4.81a2 2 0 0 0-1.94 1.41C2.63 3.56 2.5 4.5 2.5 5.5z" />
+                                </svg>
+                            </span>
+                            <div>
+                                <div class="text-sm font-semibold text-gray-900">Call Sales</div>
+                                <div class="text-xs text-gray-500">+371 2000 0000</div>
+                            </div>
+                        </a>
+
+                        <!-- Email -->
+                        <a href="mailto:sales@asrklinika.com?subject=Sales%20inquiry"
+                            class="flex items-center gap-3 rounded-lg p-3 hover:bg-gray-50 transition">
+                            <span
+                                class="grid h-10 w-10 place-content-center rounded-lg bg-[#07beb8]/10 ring-1 ring-[#07beb8]/20">
+                                <svg class="h-5 w-5 text-[#07beb8]" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="1.5">
+                                    <path d="M4 6h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z" />
+                                    <path d="m22 8-8.53 5.69a2 2 0 0 1-2.94 0L2 8" />
+                                </svg>
+                            </span>
+                            <div>
+                                <div class="text-sm font-semibold text-gray-900">Email Sales</div>
+                                <div class="text-xs text-gray-500">sales@pharmassist.com</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- micro-note -->
+        <p class="mt-4 text-center text-xs text-gray-500">
+            Certain items may require prescriptions or additional compliance documents depending on your region.
+        </p>
+    </div>
+
+    <!-- subtle gradient accent -->
+    <div class="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#07beb8]/10 to-transparent">
+    </div>
+</section>
+
+
+<section class="bg-[#07beb8] py-14">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-10">
+            <h2
+                class="text-white/95 text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]">
+                Trusted by leading companies</h2>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-px overflow-hidden rounded-lg">
+            <!-- Tile -->
+            <div
+                class="grid aspect-square place-content-center p-2 sm:p-3 bg-white grayscale transition-[filter] hover:grayscale-0">
+                <img src="{% static 'store/img/partners1.png' %}" alt="Brand 1" class="w-full h-full object-contain" />
+            </div>
+
+            <div
+                class="grid aspect-square place-content-center p-2 sm:p-3 bg-white grayscale transition-[filter] hover:grayscale-0">
+                <img src="{% static 'store/img/partners2.png' %}" alt="Brand 2" class="w-full h-full object-contain" />
+            </div>
+
+            <div
+                class="grid aspect-square place-content-center p-2 sm:p-3 bg-white grayscale transition-[filter] hover:grayscale-0">
+                <img src="{% static 'store/img/partners3.png' %}" alt="Brand 3" class="w-full h-full object-contain" />
+            </div>
+
+            <div
+                class="grid aspect-square place-content-center p-2 sm:p-3 bg-white grayscale transition-[filter] hover:grayscale-0">
+                <img src="{% static 'store/img/partners4.jpg' %}" alt="Brand 4" class="w-full h-full object-contain" />
+            </div>
+        </div>
+        <br>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-px overflow-hidden rounded-lg">
+            <!-- Tile -->
+            <div
+                class="grid aspect-square place-content-center p-2 sm:p-3 bg-white grayscale transition-[filter] hover:grayscale-0">
+                <img src="{% static 'store/img/partners5.jpg' %}" alt="Brand 1" class="w-full h-full object-contain" />
+            </div>
+
+            <div
+                class="grid aspect-square place-content-center p-2 sm:p-3 bg-white grayscale transition-[filter] hover:grayscale-0">
+                <img src="{% static 'store/img/partners6.jpg' %}" alt="Brand 2" class="w-full h-full object-contain" />
+            </div>
+
+            <div
+                class="grid aspect-square place-content-center p-2 sm:p-3 bg-white grayscale transition-[filter] hover:grayscale-0">
+                <img src="{% static 'store/img/partners7.jpg' %}" alt="Brand 3" class="w-full h-full object-contain" />
+            </div>
+
+            <div
+                class="grid aspect-square place-content-center p-2 sm:p-3 bg-white grayscale transition-[filter] hover:grayscale-0">
+                <img src="{% static 'store/img/partners8.png' %}" alt="Brand 4" class="w-full h-full object-contain" />
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ============================
+     FAQ (Accordions, no extra JS)
+     ============================ -->
+<section class="py-16" id="faq">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <!-- Heading -->
+        <div class="mx-auto max-w-3xl text-center">
+            <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                Frequently asked questions
+            </h2>
+            <p class="mt-3 text-base text-gray-600">
+                Straight answers about ordering, availability, and fulfillment.
+            </p>
+        </div>
+
+        <!-- Accordions -->
+        <div class="mx-auto mt-10 max-w-3xl space-y-3">
+            <!-- Item -->
+            <details class="group rounded-2xl border border-[#07beb8]/20 bg-inherit p-5 shadow-sm open:shadow-md">
+                <summary class="flex cursor-pointer list-none items-start justify-between gap-4">
+                    <span class="text-base font-semibold text-gray-900">How do I place an order?</span>
+                    <span
+                        class="mt-1 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-[#07beb8]/30 text-[#07beb8] transition group-open:rotate-45">
+                        <!-- plus icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M12 5v14M5 12h14" />
+                        </svg>
+                    </span>
+                </summary>
+                <div class="mt-3 text-sm leading-6 text-gray-700">
+                    Browse the catalog, add items with live availability to your cart, and checkout—no calls or manual
+                    confirmations needed. If checkout succeeds, your order is locked in.
+                </div>
+            </details>
+
+            <details class="group rounded-2xl border border-[#07beb8]/20 bg-inherit p-5 shadow-sm open:shadow-md">
+                <summary class="flex cursor-pointer list-none items-start justify-between gap-4">
+                    <span class="text-base font-semibold text-gray-900">Are stock and prices real-time?</span>
+                    <span
+                        class="mt-1 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-[#07beb8]/30 text-[#07beb8] transition group-open:rotate-45">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M12 5v14M5 12h14" />
+                        </svg>
+                    </span>
+                </summary>
+                <div class="mt-3 text-sm leading-6 text-gray-700">
+                    Yes. The catalog reflects live stock levels and current pricing. If an item is visible and in stock,
+                    you can order it.
+                </div>
+            </details>
+
+            <details class="group rounded-2xl border border-[#07beb8]/20 bg-inherit p-5 shadow-sm open:shadow-md">
+                <summary class="flex cursor-pointer list-none items-start justify-between gap-4">
+                    <span class="text-base font-semibold text-gray-900">Do I need an account before checkout?</span>
+                    <span
+                        class="mt-1 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-[#07beb8]/30 text-[#07beb8] transition group-open:rotate-45">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M12 5v14M5 12h14" />
+                        </svg>
+                    </span>
+                </summary>
+                <div class="mt-3 text-sm leading-6 text-gray-700">
+                    Creating a business account speeds up repeat orders and documents, but you can start browsing
+                    immediately and complete checkout when you’re ready.
+                </div>
+            </details>
+
+            <details class="group rounded-2xl border border-[#07beb8]/20 bg-inherit p-5 shadow-sm open:shadow-md">
+                <summary class="flex cursor-pointer list-none items-start justify-between gap-4">
+                    <span class="text-base font-semibold text-gray-900">What happens after I place an order?</span>
+                    <span
+                        class="mt-1 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-[#07beb8]/30 text-[#07beb8] transition group-open:rotate-45">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M12 5v14M5 12h14" />
+                        </svg>
+                    </span>
+                </summary>
+                <div class="mt-3 text-sm leading-6 text-gray-700">
+                    We process it right away. You’ll get status updates, and dispatch starts promptly according to your
+                    chosen delivery option.
+                </div>
+            </details>
+
+            <details class="group rounded-2xl border border-[#07beb8]/20 bg-inherit p-5 shadow-sm open:shadow-md">
+                <summary class="flex cursor-pointer list-none items-start justify-between gap-4">
+                    <span class="text-base font-semibold text-gray-900">Can I modify or cancel an order?</span>
+                    <span
+                        class="mt-1 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-[#07beb8]/30 text-[#07beb8] transition group-open:rotate-45">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M12 5v14M5 12h14" />
+                        </svg>
+                    </span>
+                </summary>
+                <div class="mt-3 text-sm leading-6 text-gray-700">
+                    Orders move fast. If you need changes, contact us immediately after checkout. We’ll do our best
+                    before dispatch begins.
+                </div>
+            </details>
+
+            <details class="group rounded-2xl border border-[#07beb8]/20 bg-inherit p-5 shadow-sm open:shadow-md">
+                <summary class="flex cursor-pointer list-none items-start justify-between gap-4">
+                    <span class="text-base font-semibold text-gray-900">What’s the minimum order and shipping
+                        scope?</span>
+                    <span
+                        class="mt-1 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-[#07beb8]/30 text-[#07beb8] transition group-open:rotate-45">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M12 5v14M5 12h14" />
+                        </svg>
+                    </span>
+                </summary>
+                <div class="mt-3 text-sm leading-6 text-gray-700">
+                    Minimums and delivery coverage depend on destination and product type. You’ll see available options
+                    at checkout.
+                </div>
+            </details>
+
+            <details class="group rounded-2xl border border-[#07beb8]/20 bg-inherit p-5 shadow-sm open:shadow-md">
+                <summary class="flex cursor-pointer list-none items-start justify-between gap-4">
+                    <span class="text-base font-semibold text-gray-900">How do you handle invoices and taxes?</span>
+                    <span
+                        class="mt-1 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-[#07beb8]/30 text-[#07beb8] transition group-open:rotate-45">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M12 5v14M5 12h14" />
+                        </svg>
+                    </span>
+                </summary>
+                <div class="mt-3 text-sm leading-6 text-gray-700">
+                    Invoices are generated automatically at checkout with your company details. Applicable VAT and
+                    duties are shown before you pay.
+                </div>
+            </details>
+
+            <details class="group rounded-2xl border border-[#07beb8]/20 bg-inherit p-5 shadow-sm open:shadow-md">
+                <summary class="flex cursor-pointer list-none items-start justify-between gap-4">
+                    <span class="text-base font-semibold text-gray-900">Is my data secure?</span>
+                    <span
+                        class="mt-1 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-[#07beb8]/30 text-[#07beb8] transition group-open:rotate-45">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M12 5v14M5 12h14" />
+                        </svg>
+                    </span>
+                </summary>
+                <div class="mt-3 text-sm leading-6 text-gray-700">
+                    Yes. We use encrypted transport, restricted access, and strict retention practices. Business
+                    profiles and payment data are protected.
+                </div>
+            </details>
+        </div>
+    </div>
+</section>
+
+
+<!-- ============================
+     FOOTER (clean, anchors only)
+     ============================ -->
+<footer class="bg-[#07beb8] text-white">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <!-- Top -->
+        <div class="grid grid-cols-1 gap-10 py-14 sm:grid-cols-2 lg:grid-cols-3">
+            <!-- Brand -->
+            <div>
+                <a href="/" class="inline-flex items-center gap-3">
+                    <!-- Simple mark -->
+                    <span class="inline-grid h-10 w-10 place-items-center rounded-xl bg-white/10 ring-1 ring-white/20">
+                        <span class="h-5 w-5 rounded-md bg-white/80"></span>
+                    </span>
+                    <span class="text-lg font-bold">PharmAssist</span>
+                </a>
+                <p class="mt-4 text-sm text-white/85">
+                    Fast, contactless ordering with live availability. No quotes — just checkout.
+                </p>
+            </div>
+
+            <!-- Explore (anchors to sections on the same page) -->
+            <div>
+                <h3 class="text-sm font-semibold uppercase tracking-wider text-white/90">Explore</h3>
+                <ul class="mt-4 space-y-2 text-white/90">
+                    <li><a href="/store" class="hover:underline">Catalog</a></li>
+                    <li><a href="#how-it-works" class="hover:underline">How it works</a></li>
+                    <li><a href="#benefits" class="hover:underline">Benefits</a></li>
+                    <li><a href="#stats" class="hover:underline">Stats</a></li>
+                    <li><a href="#clients" class="hover:underline">Top clients</a></li>
+                    <li><a href="#faq" class="hover:underline">FAQ</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact -->
+            <div>
+                <h3 class="text-sm font-semibold uppercase tracking-wider text-white/90">Contact</h3>
+                <ul class="mt-4 space-y-2 text-white/90">
+                    <li>
+                        <a href="mailto:sales@asrklinika.example"
+                            class="inline-flex items-center gap-2 hover:underline">
+                            <!-- Mail icon -->
+                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 7l9 6 9-6" />
+                                <path d="M21 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7" />
+                            </svg>
+                            sales@pharmassist.example
+                        </a>
+                    </li>
+                    <li>
+                        <a href="tel:+37100000000" class="inline-flex items-center gap-2 hover:underline">
+                            <!-- Phone icon -->
+                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path
+                                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.9 19.9 0 0 1-8.63-3.07 19.6 19.6 0 0 1-6-6A19.9 19.9 0 0 1 2.08 4.18 2 2 0 0 1 4.06 2h3a2 2 0 0 1 2 1.72c.12.86.33 1.7.63 2.49a2 2 0 0 1-.45 2.11L8.1 9.9a16 16 0 0 0 6 6l1.58-1.14a2 2 0 0 1 2.11-.45c.79.3 1.63.51 2.49.63A2 2 0 0 1 22 16.92z" />
+                            </svg>
+                            +371 0000 0000
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="border-t border-white/15"></div>
+
+        <!-- Bottom -->
+        <div class="flex flex-col items-center justify-between gap-3 py-6 sm:flex-row">
+            <p class="text-sm text-white/85">© 2025 PharmAssist. All rights reserved.</p>
+            <!-- No secondary links -->
+            <div class="h-5"></div>
+        </div>
+    </div>
+</footer>
+
+
+
+
+<script>
+    (function () {
+        const wrap = document.getElementById('hero-carousel');
+        if (!wrap) return;
+        function slide(dir) {
+            const w = wrap.clientWidth;
+            wrap.scrollBy({ left: (dir || 1) * w, behavior: 'smooth' });
+        }
+        document.querySelectorAll('[data-dir]').forEach(btn => {
+            btn.addEventListener('click', () => slide(parseInt(btn.dataset.dir, 10)));
+        });
+    })();
+
+    (() => {
+        const btn = document.getElementById('salesBtn');
+        const menu = document.getElementById('salesMenu');
+
+        const close = () => { menu.classList.add('hidden'); btn.setAttribute('aria-expanded', 'false'); };
+        const open = () => { menu.classList.remove('hidden'); btn.setAttribute('aria-expanded', 'true'); };
+
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            menu.classList.contains('hidden') ? open() : close();
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!menu.contains(e.target) && e.target !== btn) close();
+        });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+    })();
+</script>
+
+{% endblock %}

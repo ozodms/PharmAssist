@@ -4,37 +4,39 @@
 {% block title %}Store — PharmAssist{% endblock %}
 
 {% block content %}
-<div class="container mx-auto px-4 py-16">
-    <div class="grid w-fit mx-auto grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-        {% for product in products %}
-        <article class="w-[280px] rounded-xl overflow-hidden shadow">
-            <div class="group h-64 rounded-md bg-white border-2 border-dashed border-[#07beb8]/40
+<div class="container mx-auto px-6">
+    <div class="container mx-auto px-4 py-16">
+        <div class="grid w-fit mx-auto grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {% for product in products %}
+            <article class="w-[280px] rounded-xl overflow-hidden shadow">
+                <div class="group h-64 rounded-md bg-white border-2 border-dashed border-[#07beb8]/40
                   flex items-center justify-center transition-colors duration-300
                   hover:border-[#07beb8] hover:bg-[#07beb8]/5">
-                <a href="{% url 'order_item' product.id %}">
-                    <img src="{{ product.image.url }}" alt="{{ product.name }}"
-                        class="max-h-full max-w-full object-contain transition-transform duration-300 ease-out group-hover:-translate-y-2" />
-                </a>
-            </div>
-
-            <div class="p-4">
-                <h3 class="text-sm font-semibold text-gray-900">{{ product.name }}</h3>
-                <p class="mt-1 text-xs text-gray-500">{{ product.country }}</p>
-                <p class="mt-2 text-base font-bold text-gray-900">€{{ product.price }}</p>
-
-                <div class="mt-4 flex gap-2">
-                    <button type="button" data-product="{{ product.id }}" data-action="add"
-                        class="w-1/2 px-4 py-2 border-2 border-[#07beb8] rounded-lg transition hover:bg-[#07beb8] hover:text-white update-cart">
-                        Add to Cart
-                    </button>
-                    <a href="{% url 'order_item' product.id %}"
-                        class="w-1/2 px-4 py-2 text-center border-2 border-[#07beb8] rounded-lg transition hover:bg-[#07beb8] hover:text-white">
-                        View
+                    <a href="{% url 'order_item' product.id %}">
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}"
+                            class="max-h-full max-w-full object-contain transition-transform duration-300 ease-out group-hover:-translate-y-2" />
                     </a>
                 </div>
-            </div>
-        </article>
-        {% endfor %}
+
+                <div class="p-4">
+                    <h3 class="text-sm font-semibold text-gray-900">{{ product.name }}</h3>
+                    <p class="mt-1 text-xs text-gray-500">{{ product.country }}</p>
+                    <p class="mt-2 text-base font-bold text-gray-900">€{{ product.price }}</p>
+
+                    <div class="mt-4 flex gap-2">
+                        <button type="button" data-product="{{ product.id }}" data-action="add"
+                            class="w-1/2 px-4 py-2 border-2 border-[#07beb8] rounded-lg transition hover:bg-[#07beb8] hover:text-white update-cart">
+                            Add to Cart
+                        </button>
+                        <a href="{% url 'order_item' product.id %}"
+                            class="w-1/2 px-4 py-2 text-center border-2 border-[#07beb8] rounded-lg transition hover:bg-[#07beb8] hover:text-white">
+                            View
+                        </a>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
     </div>
 </div>
 {% endblock content %}
