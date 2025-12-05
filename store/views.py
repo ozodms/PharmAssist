@@ -374,3 +374,6 @@ def profile_views(request):
     return render(request, 'store/profile.html', {
         'customer': customer,
     })
+
+def home(request):
+    return render(request, "store/home.html", {})
