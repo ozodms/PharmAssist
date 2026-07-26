@@ -7,23 +7,24 @@ from django.http import JsonResponse
 from django.db import transaction
 from .models import *
 import json
+from decimal import Decimal
+from json import JSONDecodeError
+
 
 def get_cart_context(request):
-    items = []
-    total = 0
-    total_items = 0
+    items, total, total_items = [], Decimal("0.00"), 0
 
     if request.user.is_authenticated:
         customer, _ = Customer.objects.get_or_create(user=request.user)
         order, _ = Order.objects.get_or_create(customer=customer, complete=False)
 
-        for oi in order.orderitem_set.select_related("product").all():
+        for oi in order.orderitem_set.select_related("product"):
+            if not oi.product:
+                continue
             subtotal = oi.product.price * oi.quantity
-            items.append({
-                "product": oi.product,
-                "quantity": oi.quantity,
-                "subtotal": subtotal,
-            })
+            items.append(
+                {"product": oi.product, "quantity": oi.quantity, "subtotal": subtotal}
+            )
             total += subtotal
             total_items += oi.quantity
 
@@ -36,14 +37,24 @@ def get_cart_context(request):
         }
 
     cart_data = request.session.get("cart", {})
-    for pid, qty in cart_data.items():
-        product = get_object_or_404(Product, id=pid)
+    if not cart_data:
+        return {
+            "items": [],
+            "total": total,
+            "total_items": 0,
+            "order": None,
+            "is_db": False,
+        }
+
+    pids = [int(pid) for pid in cart_data.keys()]
+    products = Product.objects.in_bulk(pids)
+    for pid_str, qty in cart_data.items():
+        pid = int(pid_str)
+        product = products.get(pid)
+        if not product:
+            continue
         subtotal = product.price * qty
-        items.append({
-            "product": product,
-            "quantity": qty,
-            "subtotal": subtotal,
-        })
+        items.append({"product": product, "quantity": qty, "subtotal": subtotal})
         total += subtotal
         total_items += qty
 
@@ -55,6 +66,7 @@ def get_cart_context(request):
         "is_db": False,
     }
 
+
 def _attach_session_cart_to_order(request, customer):
     cart_data = request.session.get("cart", {})
     if not cart_data:
@@ -62,11 +74,20 @@ def _attach_session_cart_to_order(request, customer):
 
     order, _ = Order.objects.get_or_create(customer=customer, complete=False)
 
-    for pid, qty in cart_data.items():
-        product = get_object_or_404(Product, id=pid)
+    pids = [int(pid) for pid in cart_data.keys()]
+    products = Product.objects.in_bulk(pids)
+
+    for pid_str, qty in cart_data.items():
+        product = products.get(int(pid_str))
+        if not product:
+            continue
         item, _ = OrderItem.objects.get_or_create(order=order, product=product)
-        item.quantity = qty
-        item.save()
+        new_qty = min((item.quantity or 0) + int(qty), product.availability)
+        if new_qty <= 0:
+            item.delete()
+        else:
+            item.quantity = new_qty
+            item.save()
 
     request.session["cart"] = {}
     request.session.modified = True
@@ -78,108 +99,88 @@ def store(request):
     cart_ctx = get_cart_context(request)
 
     context = {
-        'products': products,
-        'cartItems': cart_ctx['total_items'],
+        "products": products,
+        "cartItems": cart_ctx["total_items"],
     }
-    return render(request, 'store/store.html', context)
+    return render(request, "store/store.html", context)
 
 
 def cart(request):
     ctx = get_cart_context(request)
     return render(request, "store/cart.html", ctx)
 
-
 @transaction.atomic
 def checkout(request):
-    if request.user.is_authenticated:
-        ctx = get_cart_context(request)
-        return render(request, "store/checkout.html", ctx)
-
+    ctx = get_cart_context(request)
     if request.method == "GET":
-        ctx = get_cart_context(request)
         return render(request, "store/checkout.html", ctx)
 
-    legal_name = request.POST.get("legal_name", "").strip()
-    company_reg_number = request.POST.get("company_reg_number", "").strip()
-    tax_id = request.POST.get("tax_id", "").strip()
-    registered_address = request.POST.get("registered_address", "").strip()
-    billing_address = request.POST.get("billing_address", "").strip()
-    delivery_address = request.POST.get("delivery_address", "").strip()
+    if request.user.is_authenticated:
+        return render(request, "store/checkout.html", ctx)
 
-    contact_name = request.POST.get("contact_name", "").strip()
-    contact_position = request.POST.get("contact_position", "").strip()
-    contact_email = request.POST.get("contact_email", "").strip()
-    contact_phone = request.POST.get("contact_phone", "").strip()
+    fields = {k: request.POST.get(k, "").strip() for k in [
+        "legal_name","company_reg_number","tax_id","registered_address",
+        "billing_address","delivery_address","contact_name","contact_position",
+        "contact_email","contact_phone","bank_name","bank_account","bank_swift",
+        "password1","password2",
+    ]}
 
-    bank_name = request.POST.get("bank_name", "").strip()
-    bank_account = request.POST.get("bank_account", "").strip()
-    bank_swift = request.POST.get("bank_swift", "").strip()
-
-    password1 = request.POST.get("password1", "")
-    password2 = request.POST.get("password2", "")
-
-    # validation
     errors = []
-    required_fields = [
-        legal_name, company_reg_number, tax_id,
-        registered_address,
-        contact_name, contact_position, contact_email, contact_phone,
-        bank_name, bank_account, bank_swift,
-        password1, password2
-    ]
-    if any(not f for f in required_fields):
+    required = ["legal_name","company_reg_number","tax_id","registered_address",
+                "contact_name","contact_position","contact_email","contact_phone",
+                "bank_name","bank_account","bank_swift","password1","password2"]
+    if any(not fields[k] for k in required):
         errors.append("Please fill in all required fields.")
-    if password1 != password2:
+    if fields["password1"] != fields["password2"]:
         errors.append("Passwords do not match.")
-    if len(password1) < 8:
+    if len(fields["password1"]) < 8:
         errors.append("Password must be at least 8 characters.")
-    if User.objects.filter(username=tax_id).exists():
+    if User.objects.filter(username=fields["tax_id"]).exists():
         errors.append("An account with this Tax ID already exists. Please log in.")
 
     if errors:
-        ctx = get_cart_context(request)
-        ctx["error"] = errors[0]
+        ctx["errors"] = errors
         return render(request, "store/checkout.html", ctx)
 
-    user = User.objects.create_user(
-        username=tax_id,
-        password=password1,
-        email=contact_email or ""
-    )
+    with transaction.atomic():
+        user = User.objects.create_user(
+            username=fields["tax_id"],
+            password=fields["password1"],
+            email=fields["contact_email"] or ""
+        )
+        customer, _ = Customer.objects.get_or_create(user=user)
+        customer.legal_name = fields["legal_name"]
+        customer.company_reg_number = fields["company_reg_number"]
+        customer.tax_id = fields["tax_id"]
+        customer.registered_address = fields["registered_address"]
+        customer.billing_address = fields["billing_address"]
+        customer.delivery_address = fields["delivery_address"]
+        customer.contact_name = fields["contact_name"]
+        customer.contact_position = fields["contact_position"]
+        customer.contact_email = fields["contact_email"]
+        customer.contact_phone = fields["contact_phone"]
+        customer.bank_name = fields["bank_name"]
+        customer.bank_account = fields["bank_account"]
+        customer.bank_swift = fields["bank_swift"]
+        customer.save()
 
-    customer, _ = Customer.objects.get_or_create(user=user)
-    customer.legal_name = legal_name
-    customer.company_reg_number = company_reg_number
-    customer.tax_id = tax_id
-    customer.registered_address = registered_address
-    customer.billing_address = billing_address
-    customer.delivery_address = delivery_address
-    customer.contact_name = contact_name
-    customer.contact_position = contact_position
-    customer.contact_email = contact_email
-    customer.contact_phone = contact_phone
-    customer.bank_name = bank_name
-    customer.bank_account = bank_account
-    customer.bank_swift = bank_swift
-    customer.save()
+        _attach_session_cart_to_order(request, customer)
 
-    _attach_session_cart_to_order(request, customer)
-    login(request, user)
+    transaction.on_commit(lambda: login(request, user))
     return redirect("order")
 
-
 def updateItem(request):
-
     try:
-        data = json.loads(request.body or "{}")
+        data = json.loads(request.body)
         product_id = int(data.get('productId'))
         action = data.get('action')
-        product = get_object_or_404(Product, id=product_id)
-    except Exception:
+    except (JSONDecodeError, TypeError, ValueError):
         return JsonResponse({'error': 'Bad request'}, status=400)
 
     if action not in ('add', 'remove', 'clear'):
         return JsonResponse({'error': 'Unknown action'}, status=400)
+
+    product = get_object_or_404(Product, id=product_id)
 
     if request.user.is_authenticated:
         customer, _ = Customer.objects.get_or_create(user=request.user)
@@ -189,46 +190,44 @@ def updateItem(request):
             OrderItem.objects.filter(order=order, product=product).delete()
             return JsonResponse({'ok': True})
 
-        order_item, created = OrderItem.objects.get_or_create(order=order, product=product)
+        oi, created = OrderItem.objects.get_or_create(order=order, product=product)
 
         if action == 'add':
-            if created:
-                order_item.quantity = 1
+            new_qty = min((oi.quantity or 0) + 1, product.availability)
+            if new_qty <= 0:
+                oi.delete()
             else:
-                if order_item.quantity < product.availability:
-                    order_item.quantity += 1
-            order_item.save()
+                oi.quantity = new_qty
+                oi.save()
 
         elif action == 'remove':
-            order_item.quantity -= 1
-            if order_item.quantity <= 0:
-                order_item.delete()
+            new_qty = (oi.quantity or 0) - 1
+            if new_qty <= 0:
+                oi.delete()
             else:
-                order_item.save()
+                oi.quantity = min(new_qty, product.availability)
+                oi.save()
 
         return JsonResponse({'ok': True})
 
+    # session cart
     cart = request.session.get('cart', {})
     pid = str(product.id)
     qty = int(cart.get(pid, 0))
 
     if action == 'clear':
         cart.pop(pid, None)
-        request.session['cart'] = cart
-        return JsonResponse({'ok': True})
-
-    if action == 'add':
-        qty = min(qty + 1, product.availability)
+    elif action == 'add':
+        cart[pid] = min(qty + 1, product.availability)
     elif action == 'remove':
-        qty -= 1
-
-    if qty <= 0:
-        cart.pop(pid, None)
-    else:
-        cart[pid] = qty
+        new_qty = qty - 1
+        if new_qty <= 0:
+            cart.pop(pid, None)
+        else:
+            cart[pid] = min(new_qty, product.availability)
 
     request.session['cart'] = cart
-
+    request.session.modified = True
     return JsonResponse({'ok': True})
 
 
@@ -240,6 +239,7 @@ def order_item(request, pk):
     product = get_object_or_404(Product, pk=pk)
     return render(request, "store/order_item.html", {"product": product})
 
+
 @require_POST
 def set_quantity(request, pk):
     product = get_object_or_404(Product, pk=pk)
@@ -249,73 +249,104 @@ def set_quantity(request, pk):
     except (TypeError, ValueError):
         qty = 1
 
-    qty = max(1, min(qty, product.availability))
+    qty = max(0, min(qty, product.availability))
 
     if request.user.is_authenticated:
         customer, _ = Customer.objects.get_or_create(user=request.user)
         order, _ = Order.objects.get_or_create(customer=customer, complete=False)
+        if qty <= 0:
+            OrderItem.objects.filter(order=order, product=product).delete()
+            return JsonResponse({"ok": True, "qty": 0})
         item, _ = OrderItem.objects.get_or_create(order=order, product=product)
         item.quantity = qty
         item.save()
         return JsonResponse({"ok": True, "qty": qty})
 
     cart = request.session.get("cart", {})
-    cart[str(product.id)] = qty
+    if qty <= 0:
+        cart.pop(str(product.id), None)
+    else:
+        cart[str(product.id)] = qty
     request.session["cart"] = cart
-
+    request.session.modified = True
     return JsonResponse({"ok": True, "qty": qty})
+
 
 def login_views(request):
     if request.user.is_authenticated:
-        return redirect('store')
+        return redirect("store")
 
-    if request.method == 'POST':
-        tax_id = request.POST.get('tax_id')
-        password = request.POST.get('password')
+    if request.method == "POST":
+        tax_id = request.POST.get("tax_id")
+        password = request.POST.get("password")
         user = authenticate(request, username=tax_id, password=password)
         if user is not None:
             login(request, user)
-            return redirect('store')
+            return redirect("store")
         else:
-            return render(request, 'store/login.html', {
-                'error': 'Wrong Tax ID or password.',
-            })
+            return render(
+                request,
+                "store/login.html",
+                {
+                    "error": "Wrong Tax ID or password.",
+                },
+            )
 
-    return render(request, 'store/login.html')
+    return render(request, "store/login.html")
 
 
 def register_views(request):
-    if request.method == 'POST':
-        legal_name = request.POST.get('legal_name', '').strip()
-        tax_id = request.POST.get('tax_id', '').strip()
-        email = request.POST.get('email', '').strip()
-        password1 = request.POST.get('password1', '')
-        password2 = request.POST.get('password2', '')
-        company_reg_number = request.POST.get('company_reg_number', '').strip()
-        registered_address = request.POST.get('registered_address', '').strip()
-        contact_phone = request.POST.get('contact_phone', '').strip()
-        bank_name = request.POST.get('bank_name', '').strip()
-        bank_account = request.POST.get('bank_account', '').strip()
-        bank_swift = request.POST.get('bank_swift', '').strip()
+    if request.method == "POST":
+        legal_name = request.POST.get("legal_name", "").strip()
+        tax_id = request.POST.get("tax_id", "").strip()
+        email = request.POST.get("email", "").strip()
+        password1 = request.POST.get("password1", "")
+        password2 = request.POST.get("password2", "")
+        company_reg_number = request.POST.get("company_reg_number", "").strip()
+        registered_address = request.POST.get("registered_address", "").strip()
+        contact_phone = request.POST.get("contact_phone", "").strip()
+        bank_name = request.POST.get("bank_name", "").strip()
+        bank_account = request.POST.get("bank_account", "").strip()
+        bank_swift = request.POST.get("bank_swift", "").strip()
         required_fields = [
-            legal_name, tax_id, email, password1, password2,
-            company_reg_number, registered_address, contact_phone,
-            bank_name, bank_account, bank_swift,
+            legal_name,
+            tax_id,
+            email,
+            password1,
+            password2,
+            company_reg_number,
+            registered_address,
+            contact_phone,
+            bank_name,
+            bank_account,
+            bank_swift,
         ]
         if any(not f for f in required_fields):
-            return render(request, 'store/register.html', {
-                'error': 'Please fill in all required fields.',
-            })
+            return render(
+                request,
+                "store/register.html",
+                {
+                    "error": "Please fill in all required fields.",
+                },
+            )
 
         if password1 != password2:
-            return render(request, 'store/register.html', {
-                'error': 'Passwords do not match.',
-            })
+            return render(
+                request,
+                "store/register.html",
+                {
+                    "error": "Passwords do not match.",
+                },
+            )
 
         if User.objects.filter(username=tax_id).exists():
-            return render(request, 'store/register.html', {
-                'error': 'A user with this Tax ID already exists.',
-            })
+            return render(
+                request,
+                "store/register.html",
+                {
+                    "error": "A user with this Tax ID already exists.",
+                },
+            )
 
         user = User.objects.create_user(
             username=tax_id,
@@ -339,41 +370,33 @@ def register_views(request):
         auth_user = authenticate(request, username=tax_id, password=password1)
         if auth_user:
             login(request, auth_user)
-            return redirect('store')
-        return redirect('login')
+            return redirect("store")
+        return redirect("login")
 
-    return render(request, 'store/register.html')
+    return render(request, "store/register.html")
 
 
 def logout_views(request):
     logout(request)
-    return redirect('store')
+    return redirect("store")
+
 
 @login_required
 def profile_views(request):
     customer, _ = Customer.objects.get_or_create(user=request.user)
-    if request.method == 'POST':
-        customer.legal_name = request.POST.get('legal_name', '').strip()
-        customer.company_reg_number = request.POST.get('company_reg_number', '').strip()
-        customer.registered_address = request.POST.get('registered_address', '').strip()
-        customer.billing_address = request.POST.get('billing_address', '').strip()
-        customer.delivery_address = request.POST.get('delivery_address', '').strip()
-        customer.contact_name = request.POST.get('contact_name', '').strip()
-        customer.contact_position = request.POST.get('contact_position', '').strip()
-        customer.contact_email = request.POST.get('contact_email', '').strip()
-        customer.contact_phone = request.POST.get('contact_phone', '').strip()
-        customer.bank_name = request.POST.get('bank_name', '').strip()
-        customer.bank_account = request.POST.get('bank_account', '').strip()
-        customer.bank_swift = request.POST.get('bank_swift', '').strip()
-        customer.save()
-        return render(request, 'store/profile.html', {
-            'customer': customer,
-            'saved': True,
-        })
 
-    return render(request, 'store/profile.html', {
-        'customer': customer,
-    })
+    if request.method == 'POST':
+        for field in [
+            'legal_name','company_reg_number','registered_address','billing_address','delivery_address',
+            'contact_name','contact_position','contact_email','contact_phone',
+            'bank_name','bank_account','bank_swift'
+        ]:
+            setattr(customer, field, request.POST.get(field, '').strip())
+        customer.save()
+        return redirect('profile')  # PRG
+
+    return render(request, 'store/profile.html', {'customer': customer})
+
 
 def home(request):
     return render(request, "store/home.html", {})
